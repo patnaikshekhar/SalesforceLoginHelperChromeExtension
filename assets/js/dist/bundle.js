@@ -19685,6 +19685,10 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
+	var _helper = __webpack_require__(163);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19719,6 +19723,8 @@
 				if (this.i > 4) {
 					this.i = 0;
 				}
+
+				_helper2.default.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871');
 			}
 		}, {
 			key: 'filterResults',
@@ -20018,6 +20024,30 @@
 	}(_react2.default.Component);
 
 	exports.default = AccountListItem;
+
+/***/ },
+/* 163 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = {
+	    openWindow: function openWindow(url, username, password) {
+	        var incognito = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+
+	        var secret = "dsaklhkh231231jhlkaasd";
+	        var eUsername = CryptoJS.TripleDES.encrypt(username, secret);
+	        var ePassword = CryptoJS.TripleDES.encrypt(password, secret);
+
+	        chrome.windows.create({
+	            url: "login.html?a=" + url + "&b=" + ePassword + "&c=" + eUsername,
+	            incognito: incognito
+	        });
+	    }
+	};
 
 /***/ }
 /******/ ]);

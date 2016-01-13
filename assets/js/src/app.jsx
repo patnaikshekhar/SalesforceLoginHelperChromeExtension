@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import AccountList from './accountList';
 import Store from './store';
+import Helper from './helper'
 
 class App extends React.Component {
 	
@@ -19,6 +20,8 @@ class App extends React.Component {
 		if (this.i > 4) {
 			this.i = 0;
 		}
+        
+        Helper.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871');
 	}
 
 	filterResults(e) {
