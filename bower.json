@@ -1,0 +1,22 @@
+{
+  "name": "salesforce_login_helper",
+  "authors": [
+    "Shekhar Patnaik <patnaikshekhar@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "salesforce-lightning-design-system": "~0.12.1"
+  }
+}
