@@ -1,5 +1,5 @@
 module.exports = {
-	entry: './assets/js/src/main.js',
+	entry: './assets/js/src/main.jsx',
 	output: {
 		path: './assets/js/dist/',
 		filename: 'bundle.js'
@@ -9,6 +9,9 @@ module.exports = {
 		port: 5050,
 		publicPath: "/assets/js/dist/"
 	},
+    resolve: {
+        extensions: ['', '.js', '.jsx']
+    },
 	module: {
 		loaders: [{
 			test: /\.jsx?$/,
