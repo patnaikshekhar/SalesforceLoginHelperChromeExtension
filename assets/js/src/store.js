@@ -12,7 +12,10 @@ export var ACTION_CHANGED = 'changed';
 
 export default {
 	
-	accounts: [],
+	accounts: [
+        new Account('UAT', 'Syngenta', 'https://login.salesforce.com', 'test', 'test'),
+        new Account('FR Test', 'Syngenta', 'https://login.salesforce.com', 'test', 'test')
+    ],
 	subscribers: [],
 
 	addAccount(name, group, url, username, password) {

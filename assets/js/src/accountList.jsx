@@ -37,13 +37,8 @@ export default class AccountList extends React.Component {
 			);
 
 		return (
-			<table className="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal slds-no-row-hover">
+			<table className="slds-table slds-table--bordered">
 				<thead className="slds-text-heading--label">
-					<tr>
-						<th>Name</th>
-						<th></th>
-						<th></th>
-					</tr>
 				</thead>
 				<tbody>
 					{ items }

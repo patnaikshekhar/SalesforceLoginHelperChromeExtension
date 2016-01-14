@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import AccountList from './accountList';
 import Store from './store';
-import Helper from './helper'
 
 class App extends React.Component {
 	
@@ -20,8 +19,6 @@ class App extends React.Component {
 		if (this.i > 4) {
 			this.i = 0;
 		}
-        
-        Helper.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871');
 	}
 
 	filterResults(e) {
@@ -35,19 +32,26 @@ class App extends React.Component {
 	render() {
 		return (
 			<div className="slds-grid slds-wrap">
-		  		<nav className="slds-col slds-size--1-of-1">
-		  			<div className="slds-col slds-size--1-of-2">
-		    			<button className="slds--button" onClick={this.addAccount.bind(this)}>Add Account</button>
-		    		</div>
-		    		<div className="slds-col slds-size--1-of-2">
-		    			<input type="text" placeholder="Search.." onChange={this.filterResults.bind(this)} />
-		    		</div>
+		  		<nav className="slds-col slds-size--1-of-1 margin-on-top slds-col--padded">
+                    <div className="slds-grid">
+                        <div className="slds-col slds-size--4-of-6">
+                            <div className="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                <svg aria-hidden="true" className="slds-input__icon">
+                                    <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+                                </svg>
+                                <input placeholder="Search.." onChange={this.filterResults.bind(this)} className="slds-input" type="text" />
+                            </div>
+                        </div>
+                        <div className="slds-col slds-size--1-of-6 slds-col--padded">
+		    			   <button className="slds-button slds-button--brand" onClick={this.addAccount.bind(this)}>Add Account</button>
+		    		    </div>
+                    </div>
 		  		</nav>
-		  		<div className="slds-col slds-size--1-of-1">
+		  		<div className="slds-col slds-size--1-of-1 margin-on-top">
 		  			<AccountList filter={ this.state.filter }/>
 		  		</div>
 		  		<div className="slds-col slds-size--1-of-1">
-		  			Hello
+		  			
 		  		</div>
 			</div>
 		);

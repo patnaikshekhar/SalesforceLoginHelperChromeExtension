@@ -19685,10 +19685,6 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _helper = __webpack_require__(163);
-
-	var _helper2 = _interopRequireDefault(_helper);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19723,8 +19719,6 @@
 				if (this.i > 4) {
 					this.i = 0;
 				}
-
-				_helper2.default.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871');
 			}
 		}, {
 			key: 'filterResults',
@@ -19743,32 +19737,41 @@
 					{ className: 'slds-grid slds-wrap' },
 					_react2.default.createElement(
 						'nav',
-						{ className: 'slds-col slds-size--1-of-1' },
+						{ className: 'slds-col slds-size--1-of-1 margin-on-top slds-col--padded' },
 						_react2.default.createElement(
 							'div',
-							{ className: 'slds-col slds-size--1-of-2' },
+							{ className: 'slds-grid' },
 							_react2.default.createElement(
-								'button',
-								{ className: 'slds--button', onClick: this.addAccount.bind(this) },
-								'Add Account'
+								'div',
+								{ className: 'slds-col slds-size--4-of-6' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'slds-form-element__control slds-input-has-icon slds-input-has-icon--right' },
+									_react2.default.createElement(
+										'svg',
+										{ 'aria-hidden': 'true', className: 'slds-input__icon' },
+										_react2.default.createElement('use', { xlinkHref: '/assets/icons/utility-sprite/svg/symbols.svg#search' })
+									),
+									_react2.default.createElement('input', { placeholder: 'Search..', onChange: this.filterResults.bind(this), className: 'slds-input', type: 'text' })
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'slds-col slds-size--1-of-6 slds-col--padded' },
+								_react2.default.createElement(
+									'button',
+									{ className: 'slds-button slds-button--brand', onClick: this.addAccount.bind(this) },
+									'Add Account'
+								)
 							)
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'slds-col slds-size--1-of-2' },
-							_react2.default.createElement('input', { type: 'text', placeholder: 'Search..', onChange: this.filterResults.bind(this) })
 						)
 					),
 					_react2.default.createElement(
 						'div',
-						{ className: 'slds-col slds-size--1-of-1' },
+						{ className: 'slds-col slds-size--1-of-1 margin-on-top' },
 						_react2.default.createElement(_accountList2.default, { filter: this.state.filter })
 					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'slds-col slds-size--1-of-1' },
-						'Hello'
-					)
+					_react2.default.createElement('div', { className: 'slds-col slds-size--1-of-1' })
 				);
 			}
 		}]);
@@ -19855,22 +19858,8 @@
 
 				return _react2.default.createElement(
 					'table',
-					{ className: 'slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal slds-no-row-hover' },
-					_react2.default.createElement(
-						'thead',
-						{ className: 'slds-text-heading--label' },
-						_react2.default.createElement(
-							'tr',
-							null,
-							_react2.default.createElement(
-								'th',
-								null,
-								'Name'
-							),
-							_react2.default.createElement('th', null),
-							_react2.default.createElement('th', null)
-						)
-					),
+					{ className: 'slds-table slds-table--bordered' },
+					_react2.default.createElement('thead', { className: 'slds-text-heading--label' }),
 					_react2.default.createElement(
 						'tbody',
 						null,
@@ -19911,7 +19900,7 @@
 
 	exports.default = {
 
-		accounts: [],
+		accounts: [new Account('UAT', 'Syngenta', 'https://login.salesforce.com', 'test', 'test'), new Account('FR Test', 'Syngenta', 'https://login.salesforce.com', 'test', 'test')],
 		subscribers: [],
 
 		addAccount: function addAccount(name, group, url, username, password) {
@@ -19936,7 +19925,7 @@
 /* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -19947,6 +19936,10 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _helper = __webpack_require__(163);
+
+	var _helper2 = _interopRequireDefault(_helper);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19966,54 +19959,62 @@
 		}
 
 		_createClass(AccountListItem, [{
-			key: "render",
+			key: 'openTab',
+			value: function openTab() {
+				_helper2.default.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871', false, true);
+			}
+		}, {
+			key: 'openWindow',
+			value: function openWindow() {
+				_helper2.default.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871');
+			}
+		}, {
+			key: 'openIncognito',
+			value: function openIncognito() {
+				_helper2.default.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871', true);
+			}
+		}, {
+			key: 'render',
 			value: function render() {
 				return _react2.default.createElement(
-					"tr",
+					'tr',
 					null,
 					_react2.default.createElement(
-						"td",
-						{ className: "slds-lookup__item" },
+						'td',
+						{ className: 'slds-lookup__item' },
 						_react2.default.createElement(
-							"a",
-							{ id: "s01", href: "#", role: "option" },
+							'a',
+							{ id: 's01', href: '#', role: 'option' },
 							_react2.default.createElement(
-								"svg",
-								{ "aria-hidden": "true", className: "slds-icon slds-icon-standard-account slds-icon--small" },
-								_react2.default.createElement("use", { xlinkHref: "/assets/icons/standard-sprite/svg/symbols.svg#account" })
+								'svg',
+								{ 'aria-hidden': 'true', className: 'slds-icon slds-icon-standard-account slds-icon--small' },
+								_react2.default.createElement('use', { xlinkHref: '/assets/icons/standard-sprite/svg/symbols.svg#account' })
 							),
 							_react2.default.createElement(
-								"span",
+								'span',
 								null,
 								this.props.name
 							),
-							" "
+							' '
 						)
 					),
 					_react2.default.createElement(
-						"td",
+						'td',
 						null,
 						_react2.default.createElement(
-							"form",
-							{ method: "post", action: "https://login.salesforce.com/index.jsp" },
-							_react2.default.createElement("input", { type: "hidden", name: "un", value: this.props.username }),
-							_react2.default.createElement("input", { type: "hidden", name: "pw", value: this.props.password }),
-							_react2.default.createElement("input", { type: "submit", className: "slds-button", value: "Tab" })
-						)
-					),
-					_react2.default.createElement(
-						"td",
-						null,
+							'button',
+							{ className: 'slds-button slds-button--brand slds-button--small', onClick: this.openTab.bind(this) },
+							'Tab'
+						),
 						_react2.default.createElement(
-							"form",
-							{ method: "post", action: "https://login.salesforce.com/index.jsp" },
-							_react2.default.createElement("input", { type: "hidden", name: "un", value: this.props.username }),
-							_react2.default.createElement("input", { type: "hidden", name: "pw", value: this.props.password }),
-							_react2.default.createElement(
-								"button",
-								{ className: "slds-button" },
-								"Incognito"
-							)
+							'button',
+							{ className: 'slds-button slds-button--brand slds-button--small', onClick: this.openWindow.bind(this) },
+							'Window'
+						),
+						_react2.default.createElement(
+							'button',
+							{ className: 'slds-button slds-button--brand slds-button--small', onClick: this.openIncognito.bind(this) },
+							'Incognito'
 						)
 					)
 				);
@@ -20029,23 +20030,48 @@
 /* 163 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	function _openWindow(url, username, password, incognito, tab) {
+	    var secret = "dsaklhkh231231jhlkaasd";
+	    var eUsername = CryptoJS.TripleDES.encrypt(username, secret);
+	    var ePassword = CryptoJS.TripleDES.encrypt(password, secret);
+
+	    if (!tab) {
+	        chrome.windows.create({
+	            url: chrome.runtime.getURL('login.html') + '?a=' + url + '&b=' + ePassword + '&c=' + eUsername,
+	            incognito: incognito
+	        });
+	    } else {
+	        chrome.tabs.create({
+	            url: chrome.runtime.getURL('login.html') + '?a=' + url + '&b=' + ePassword + '&c=' + eUsername
+	        });
+	    }
+	}
+
 	exports.default = {
 	    openWindow: function openWindow(url, username, password) {
 	        var incognito = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+	        var tab = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
 
-	        var secret = "dsaklhkh231231jhlkaasd";
-	        var eUsername = CryptoJS.TripleDES.encrypt(username, secret);
-	        var ePassword = CryptoJS.TripleDES.encrypt(password, secret);
+	        if (incognito) {
+	            chrome.extension.isAllowedIncognitoAccess(function (isAllowedAccess) {
+	                if (!isAllowedAccess) {
+	                    alert('To use this feature please allow incognito mode in the following screen.');
 
-	        chrome.windows.create({
-	            url: "login.html?a=" + url + "&b=" + ePassword + "&c=" + eUsername,
-	            incognito: incognito
-	        });
+	                    chrome.tabs.create({
+	                        url: 'chrome://extensions/?id=' + chrome.runtime.id
+	                    });
+	                } else {
+	                    _openWindow(url, username, password, incognito, tab);
+	                }
+	            });
+	        } else {
+	            _openWindow(url, username, password, incognito, tab);
+	        }
 	    }
 	};
 

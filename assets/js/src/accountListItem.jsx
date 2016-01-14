@@ -1,6 +1,20 @@
 import React from 'react';
+import Helper from './helper';
 
 export default class AccountListItem extends React.Component {
+    
+    openTab() {
+        Helper.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871', false, true);   
+    }
+    
+    openWindow() {
+        Helper.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871');   
+    }
+    
+    openIncognito() {
+        Helper.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871', true);   
+    }
+    
 	render() {
 		return (
 			<tr>
@@ -12,20 +26,9 @@ export default class AccountListItem extends React.Component {
 			        </a>
 			    </td>
 			    <td>
-			          <form method="post" action="https://login.salesforce.com/index.jsp">
-			          	<input type="hidden" name="un" value={this.props.username} />
-			          	<input type="hidden" name="pw" value={this.props.password} />
-
-			          	<input type="submit" className="slds-button" value="Tab"></input>
-			          </form>
-			    </td>
-			    <td>
-			          <form method="post" action="https://login.salesforce.com/index.jsp">
-			          	<input type="hidden" name="un" value={this.props.username} />
-			          	<input type="hidden" name="pw" value={this.props.password} />
-
-			          	<button className="slds-button">Incognito</button>
-			          </form>
+			        <button className="slds-button slds-button--brand slds-button--small" onClick={ this.openTab.bind(this) }>Tab</button>
+                    <button className="slds-button slds-button--brand slds-button--small" onClick={ this.openWindow.bind(this) }>Window</button>
+                    <button className="slds-button slds-button--brand slds-button--small" onClick={ this.openIncognito.bind(this) }>Incognito</button>
 				</td>
 			</tr>
 		);

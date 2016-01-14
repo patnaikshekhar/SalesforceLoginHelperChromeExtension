@@ -2,3 +2,7 @@ body {
 	min-width: 600px;
 	min-height: 600px;
 }
+
+.margin-on-top {
+    margin-top: 30px; 
+}
