@@ -18,6 +18,8 @@
     "webpack": "^1.12.10"
   },
   "dependencies": {
+    "history": "^1.17.0",
+    "react-router": "^1.0.3",
     "webpack-dev-server": "^1.14.0"
   }
 }
