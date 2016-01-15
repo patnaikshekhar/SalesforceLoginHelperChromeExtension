@@ -7,17 +7,27 @@ export default class AccountList extends React.Component {
 	constructor() {
 		super();
 	}
-
+    
+    refresh(action, accounts) {
+        if (this) {
+          this.setState({
+			accounts: accounts
+		  });    
+        }
+    }
+    
 	componentWillMount() {
 		this.setState({
 			accounts: Store.accounts
 		});
 
-		Store.subscribe((action, accounts) => this.setState({
-			accounts: accounts
-		}));
+		Store.subscribe(this.refresh.bind(this));
 	}
-
+    
+    componentWillUnmount() {
+        Store.unsubscribe(this.refresh.bind(this));
+    }
+    
 	render() {
 		
 		let items = this.state.accounts
@@ -33,7 +43,7 @@ export default class AccountList extends React.Component {
 				}
 			})
 			.map((acc) => 
-				<AccountListItem name={acc.name} url={acc.url} username={acc.username} password={acc.password} /> 
+				<AccountListItem name={acc.name} group={acc.group} url={acc.url} environment={acc.environment} username={acc.username} password={acc.password} key={acc.id} id={acc.id} /> 
 			);
 
 		return (

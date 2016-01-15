@@ -19709,12 +19709,12 @@
 	        value: function render() {
 	            return _react2.default.createElement(
 	                _reactRouter.Router,
-	                null,
+	                { history: _reactRouter.browserHistory },
 	                _react2.default.createElement(
 	                    _reactRouter.Route,
 	                    { path: '/', component: _template2.default },
 	                    _react2.default.createElement(_reactRouter.IndexRoute, { component: _listAccounts2.default }),
-	                    _react2.default.createElement(_reactRouter.Route, { path: 'add', component: _editAccount2.default })
+	                    _react2.default.createElement(_reactRouter.Route, { path: 'add/:id', component: _editAccount2.default })
 	                )
 	            );
 	        }
@@ -24110,11 +24110,6 @@
 				});
 			}
 		}, {
-			key: 'addAccount',
-			value: function addAccount() {
-				_store2.default.addAccount('Test' + this.i, 'A', 'http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871');
-			}
-		}, {
 			key: 'filterResults',
 			value: function filterResults(e) {
 				var value = e.target.value;
@@ -24154,10 +24149,10 @@
 								{ className: 'slds-col slds-size--1-of-6 slds-col--padded' },
 								_react2.default.createElement(
 									_reactRouter.Link,
-									{ to: '/add' },
+									{ to: '/add/new' },
 									_react2.default.createElement(
 										'button',
-										{ className: 'slds-button slds-button--brand', onClick: this.addAccount.bind(this) },
+										{ className: 'slds-button slds-button--brand' },
 										'Add Account'
 									)
 								)
@@ -24166,7 +24161,7 @@
 					),
 					_react2.default.createElement(
 						'div',
-						{ className: 'slds-col slds-size--1-of-1 margin-on-top' },
+						{ className: 'slds-col slds-size--1-of-1 margin-on-top accountlist' },
 						_react2.default.createElement(_accountList2.default, { filter: this.state.filter })
 					),
 					_react2.default.createElement('div', { className: 'slds-col slds-size--1-of-1' })
@@ -24221,28 +24216,36 @@
 		}
 
 		_createClass(AccountList, [{
+			key: 'refresh',
+			value: function refresh(action, accounts) {
+				if (this) {
+					this.setState({
+						accounts: accounts
+					});
+				}
+			}
+		}, {
 			key: 'componentWillMount',
 			value: function componentWillMount() {
-				var _this2 = this;
-
 				this.setState({
 					accounts: _store2.default.accounts
 				});
 
-				_store2.default.subscribe(function (action, accounts) {
-					return _this2.setState({
-						accounts: accounts
-					});
-				});
+				_store2.default.subscribe(this.refresh.bind(this));
+			}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {
+				_store2.default.unsubscribe(this.refresh.bind(this));
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this3 = this;
+				var _this2 = this;
 
 				var items = this.state.accounts.filter(function (acc) {
-					if (_this3.props.filter) {
-						if (acc.name.indexOf(_this3.props.filter) > -1) {
+					if (_this2.props.filter) {
+						if (acc.name.indexOf(_this2.props.filter) > -1) {
 							return true;
 						} else {
 							return false;
@@ -24251,7 +24254,7 @@
 						return true;
 					}
 				}).map(function (acc) {
-					return _react2.default.createElement(_accountListItem2.default, { name: acc.name, url: acc.url, username: acc.username, password: acc.password });
+					return _react2.default.createElement(_accountListItem2.default, { name: acc.name, group: acc.group, url: acc.url, environment: acc.environment, username: acc.username, password: acc.password, key: acc.id, id: acc.id });
 				});
 
 				return _react2.default.createElement(
@@ -24279,44 +24282,81 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Account = function Account(name, group, url, username, password) {
-		_classCallCheck(this, Account);
+	var Account = function Account(id, name, group, url, environment, username, password, token) {
+	  _classCallCheck(this, Account);
 
-		this.name = name;
-		this.group = group;
-		this.url = url;
-		this.username = username;
-		this.password = password;
+	  this.id = id;
+	  this.name = name;
+	  this.group = group;
+	  this.url = url;
+	  this.username = username;
+	  this.password = password;
+	  this.token = token;
 	};
 
 	var ACTION_CHANGED = exports.ACTION_CHANGED = 'changed';
 
+	var index = 0;
+
 	exports.default = {
 
-		accounts: [new Account('UAT', 'Syngenta', 'https://login.salesforce.com', 'test', 'test'), new Account('FR Test', 'Syngenta', 'https://login.salesforce.com', 'test', 'test')],
-		subscribers: [],
+	  accounts: [],
+	  // new Account('UAT', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', ''),
+	  //     new Account('FR Test', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', '')
 
-		addAccount: function addAccount(name, group, url, username, password) {
+	  getLastIndex: function getLastIndex() {
+	    index += 1;
+	    return index;
+	  },
 
-			this.accounts.push(new Account(name, group, url, username, password));
+	  subscribers: [],
 
-			this.dispatch(ACTION_CHANGED, this.accounts);
+	  addAccount: function addAccount(name, group, url, environment, username, password, token) {
+	    this.accounts.push(new Account(this.getLastIndex(), name, group, url, environment, username, password, token));
 
-			return true;
-		},
-		subscribe: function subscribe(callback) {
-			this.subscribers.push(callback);
-		},
-		dispatch: function dispatch(action, obj) {
-			this.subscribers.forEach(function (callback) {
-				return callback(action, obj);
-			});
-		}
+	    this.dispatch(ACTION_CHANGED, this.accounts);
+	    return true;
+	  },
+	  updateAccount: function updateAccount(id, name, group, url, environment, username, password, token) {
+
+	    var account = this.accounts.filter(function (account) {
+	      return id == account.id;
+	    })[0];
+	    account.name = name;
+	    account.group = group;
+	    account.url = url;
+	    account.environment = environment;
+	    account.username = username;
+	    account.password = password;
+	    account.token = token;
+
+	    this.dispatch(ACTION_CHANGED, this.accounts);
+	    return true;
+	  },
+	  deleteAccount: function deleteAccount(id) {
+	    this.accounts = this.accounts.filter(function (account) {
+	      return id != account.id;
+	    });
+	    this.dispatch(ACTION_CHANGED, this.accounts);
+	  },
+	  unsubscribe: function unsubscribe(callback) {
+	    this.subscribers = this.subscribers.filter(function (c) {
+	      return c != callback;
+	    });
+	  },
+	  subscribe: function subscribe(callback) {
+	    this.subscribers.push(callback);
+	  },
+	  dispatch: function dispatch(action, obj) {
+	    this.subscribers.forEach(function (callback) {
+	      return callback(action, obj);
+	    });
+	  }
 	};
 
 /***/ },
@@ -24328,7 +24368,7 @@
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	    value: true
 	});
 
 	var _react = __webpack_require__(1);
@@ -24339,6 +24379,12 @@
 
 	var _helper2 = _interopRequireDefault(_helper);
 
+	var _store = __webpack_require__(209);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _reactRouter = __webpack_require__(160);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24348,78 +24394,92 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var AccountListItem = function (_React$Component) {
-		_inherits(AccountListItem, _React$Component);
+	    _inherits(AccountListItem, _React$Component);
 
-		function AccountListItem() {
-			_classCallCheck(this, AccountListItem);
+	    function AccountListItem() {
+	        _classCallCheck(this, AccountListItem);
 
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(AccountListItem).apply(this, arguments));
-		}
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(AccountListItem).apply(this, arguments));
+	    }
 
-		_createClass(AccountListItem, [{
-			key: 'openTab',
-			value: function openTab() {
-				_helper2.default.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871', false, true);
-			}
-		}, {
-			key: 'openWindow',
-			value: function openWindow() {
-				_helper2.default.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871');
-			}
-		}, {
-			key: 'openIncognito',
-			value: function openIncognito() {
-				_helper2.default.openWindow('http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871', true);
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'tr',
-					null,
-					_react2.default.createElement(
-						'td',
-						{ className: 'slds-lookup__item' },
-						_react2.default.createElement(
-							'a',
-							{ id: 's01', href: '#', role: 'option' },
-							_react2.default.createElement(
-								'svg',
-								{ 'aria-hidden': 'true', className: 'slds-icon slds-icon-standard-account slds-icon--small' },
-								_react2.default.createElement('use', { xlinkHref: '/assets/icons/standard-sprite/svg/symbols.svg#account' })
-							),
-							_react2.default.createElement(
-								'span',
-								null,
-								this.props.name
-							),
-							' '
-						)
-					),
-					_react2.default.createElement(
-						'td',
-						null,
-						_react2.default.createElement(
-							'button',
-							{ className: 'slds-button slds-button--brand slds-button--small', onClick: this.openTab.bind(this) },
-							'Tab'
-						),
-						_react2.default.createElement(
-							'button',
-							{ className: 'slds-button slds-button--brand slds-button--small', onClick: this.openWindow.bind(this) },
-							'Window'
-						),
-						_react2.default.createElement(
-							'button',
-							{ className: 'slds-button slds-button--brand slds-button--small', onClick: this.openIncognito.bind(this) },
-							'Incognito'
-						)
-					)
-				);
-			}
-		}]);
+	    _createClass(AccountListItem, [{
+	        key: 'openTab',
+	        value: function openTab() {
+	            _helper2.default.openWindow(this.props.url, this.props.username, this.props.password, false, true);
+	        }
+	    }, {
+	        key: 'openWindow',
+	        value: function openWindow() {
+	            _helper2.default.openWindow(this.props.url, this.props.username, this.props.password);
+	        }
+	    }, {
+	        key: 'openIncognito',
+	        value: function openIncognito() {
+	            _helper2.default.openWindow(this.props.url, this.props.username, this.props.password, true);
+	        }
+	    }, {
+	        key: 'deleteRecord',
+	        value: function deleteRecord() {
+	            _store2.default.deleteAccount(this.props.id);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'tr',
+	                null,
+	                _react2.default.createElement(
+	                    'td',
+	                    { className: 'slds-lookup__item' },
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/add/' + this.props.id },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { id: 's01', href: '#', role: 'option' },
+	                            _react2.default.createElement(
+	                                'svg',
+	                                { 'aria-hidden': 'true', className: 'slds-icon slds-icon-standard-account slds-icon--small' },
+	                                _react2.default.createElement('use', { xlinkHref: '/assets/icons/standard-sprite/svg/symbols.svg#account' })
+	                            ),
+	                            _react2.default.createElement(
+	                                'span',
+	                                null,
+	                                this.props.name
+	                            ),
+	                            ' '
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'slds-button slds-button--brand slds-button--small', onClick: this.deleteRecord.bind(this) },
+	                        'Delete'
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'slds-button slds-button--brand slds-button--small', onClick: this.openTab.bind(this) },
+	                        'Tab'
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'slds-button slds-button--brand slds-button--small', onClick: this.openWindow.bind(this) },
+	                        'Window'
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'slds-button slds-button--brand slds-button--small', onClick: this.openIncognito.bind(this) },
+	                        'Incognito'
+	                    )
+	                )
+	            );
+	        }
+	    }]);
 
-		return AccountListItem;
+	    return AccountListItem;
 	}(_react2.default.Component);
 
 	exports.default = AccountListItem;
@@ -24489,6 +24549,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _store = __webpack_require__(209);
+
+	var _store2 = _interopRequireDefault(_store);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24500,25 +24564,212 @@
 	var EditAccount = function (_React$Component) {
 	    _inherits(EditAccount, _React$Component);
 
-	    function EditAccount() {
+	    function EditAccount(props, context) {
 	        _classCallCheck(this, EditAccount);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(EditAccount).apply(this, arguments));
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(EditAccount).call(this, props, context));
 	    }
 
 	    _createClass(EditAccount, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+
+	            var id = this.props.params.id;
+	            console.log(id);
+	            if (id == 'new') {
+	                this.setState({
+	                    id: null,
+	                    environment: "Production",
+	                    name: null,
+	                    group: null,
+	                    url: null,
+	                    token: null,
+	                    username: null,
+	                    password: null
+	                });
+	            } else {
+	                var account = _store2.default.accounts.filter(function (a) {
+	                    return a.id == id;
+	                })[0];
+	                console.log(account);
+	                this.setState({
+	                    id: account.id,
+	                    environment: account.environment,
+	                    name: account.name,
+	                    group: account.group,
+	                    url: account.url,
+	                    token: account.token,
+	                    username: account.username,
+	                    password: account.password
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'bindState',
+	        value: function bindState(stateVar, e) {
+	            var newState = {};
+	            newState[stateVar] = e.target.value;
+	            this.setState(Object.assign(this.state, newState));
+	        }
+	    }, {
+	        key: 'saveChanges',
+	        value: function saveChanges(e) {
+
+	            var url = this.state.environment == 'Production' ? 'https://login.salesforce.com' : this.state.environment == 'Sandbox' ? 'https://test.salesforce.com' : this.state.url;
+
+	            if (this.state.id == null) {
+	                _store2.default.addAccount(this.state.name, this.state.group, url, this.environment, this.state.username, this.state.password, this.state.token);
+	            } else {
+	                _store2.default.updateAccount(this.state.id, this.state.name, this.state.group, url, this.environment, this.state.username, this.state.password, this.state.token);
+	            }
+
+	            this.context.history.pushState('/');
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
-	                null,
-	                'Edit Account'
+	                { className: 'slds-grid slds-wrap' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'slds-col slds-size--1-of-1 margin-on-top slds-col--padded slds-form--stacked' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'slds-form-element' },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'slds-form-element__label', 'for': 'orgType' },
+	                            'Environment'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'slds-form-element__control' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'slds-select_container' },
+	                                _react2.default.createElement(
+	                                    'select',
+	                                    { id: 'environment', className: 'slds-select', onChange: this.bindState.bind(this, 'environment'), value: this.state.environment },
+	                                    _react2.default.createElement(
+	                                        'option',
+	                                        null,
+	                                        'Production'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'option',
+	                                        null,
+	                                        'Sandbox'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'option',
+	                                        null,
+	                                        'Other'
+	                                    )
+	                                )
+	                            )
+	                        )
+	                    ),
+	                    this.state.environment == 'Other' ? _react2.default.createElement(
+	                        'div',
+	                        { className: 'slds-form-element' },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'slds-form-element__label', 'for': 'url' },
+	                            'URL'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'slds-form-element__control' },
+	                            _react2.default.createElement('input', { id: 'url', className: 'slds-input', type: 'text', placeholder: 'URL', onChange: this.bindState.bind(this, 'url'), value: this.state.url })
+	                        )
+	                    ) : null,
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'slds-form-element' },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'slds-form-element__label', 'for': 'username' },
+	                            'Username'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'slds-form-element__control' },
+	                            _react2.default.createElement('input', { id: 'username', className: 'slds-input', type: 'text', placeholder: 'Username', onChange: this.bindState.bind(this, 'username'), value: this.state.username })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'slds-form-element' },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'slds-form-element__label', 'for': 'password' },
+	                            'Password'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'slds-form-element__control' },
+	                            _react2.default.createElement('input', { id: 'username', className: 'slds-input', type: 'password', placeholder: 'Password', onChange: this.bindState.bind(this, 'password'), value: this.state.password })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'slds-form-element' },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'slds-form-element__label', 'for': 'token' },
+	                            'Token'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'slds-form-element__control' },
+	                            _react2.default.createElement('input', { id: 'token', className: 'slds-input', type: 'password', placeholder: 'Token', onChange: this.bindState.bind(this, 'token'), value: this.state.token })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'slds-form-element' },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'slds-form-element__label', 'for': 'name' },
+	                            'Name'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'slds-form-element__control' },
+	                            _react2.default.createElement('input', { id: 'name', className: 'slds-input', type: 'text', placeholder: 'Name', onChange: this.bindState.bind(this, 'name'), value: this.state.name })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'slds-form-element' },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'slds-form-element__label', 'for': 'group' },
+	                            'Group'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'slds-form-element__control' },
+	                            _react2.default.createElement('input', { id: 'group', className: 'slds-input', type: 'text', placeholder: 'Group', onChange: this.bindState.bind(this, 'group'), value: this.state.group })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'slds-button slds-button--brand margin-on-top', onClick: this.saveChanges.bind(this) },
+	                        'Save'
+	                    )
+	                )
 	            );
 	        }
 	    }]);
 
 	    return EditAccount;
 	}(_react2.default.Component);
+
+	EditAccount.contextTypes = {
+	    history: _react2.default.PropTypes.object
+	};
 
 	exports.default = EditAccount;
 
@@ -24560,7 +24811,7 @@
 	        value: function render() {
 	            return _react2.default.createElement(
 	                "div",
-	                { className: "main" },
+	                { className: "slds main" },
 	                this.props.children
 	            );
 	        }

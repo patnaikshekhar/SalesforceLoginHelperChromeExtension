@@ -12,10 +12,6 @@ class ListAccounts extends React.Component {
 		});
 	}
 
-	addAccount() {
-		Store.addAccount('Test' + this.i, 'A', 'http://login.salesforce.com', 'patnaikshekhar@wave.com', 'shepat9871');
-	}
-
 	filterResults(e) {
 		let value = e.target.value;
 
@@ -38,13 +34,13 @@ class ListAccounts extends React.Component {
                             </div>
                         </div>
                         <div className="slds-col slds-size--1-of-6 slds-col--padded">
-                           <Link to={ '/add' }>
-		    			       <button className="slds-button slds-button--brand" onClick={this.addAccount.bind(this)}>Add Account</button>
+                           <Link to="/add/new">
+		    			       <button className="slds-button slds-button--brand">Add Account</button>
                            </Link>
 		    		    </div>
                     </div>
 		  		</nav>
-		  		<div className="slds-col slds-size--1-of-1 margin-on-top">
+		  		<div className="slds-col slds-size--1-of-1 margin-on-top accountlist">
 		  			<AccountList filter={ this.state.filter }/>
 		  		</div>
 		  		<div className="slds-col slds-size--1-of-1">

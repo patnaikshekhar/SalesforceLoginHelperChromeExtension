@@ -6,3 +6,8 @@ body {
 .margin-on-top {
     margin-top: 30px; 
 }
+
+.accountlist {
+    max-height: 550px;
+    overflow: scroll;
+}
