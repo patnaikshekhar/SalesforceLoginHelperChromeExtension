@@ -4,6 +4,7 @@ class Account {
 		this.name = name;
 		this.group = group;
 		this.url = url;
+        this.environment = environment;
 		this.username = username;
 		this.password = password;
         this.token = token;

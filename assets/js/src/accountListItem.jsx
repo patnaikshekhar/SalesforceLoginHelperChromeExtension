@@ -25,15 +25,16 @@ export default class AccountListItem extends React.Component {
 		return (
 			<tr>
 				<td className="slds-lookup__item">
-                    <Link to={`/add/${this.props.id}`}>
-                        <a id="s01" href="#" role="option">
+                    <a id="s01" href="#" role="option" onClick={ this.openTab.bind(this) }>
                         <svg aria-hidden="true" className="slds-icon slds-icon-standard-account slds-icon--small">
                             <use xlinkHref="/assets/icons/standard-sprite/svg/symbols.svg#account"></use>
                         </svg><span>{this.props.name}</span>&nbsp;
-                        </a>
-                    </Link>
+                    </a>
 			    </td>
 			    <td>
+                    <Link to={`/add/${this.props.id}`}>
+                        <button className="slds-button slds-button--brand slds-button--small">Edit</button>
+                    </Link>
                     <button className="slds-button slds-button--brand slds-button--small" onClick={ this.deleteRecord.bind(this) }>Delete</button>
 			        <button className="slds-button slds-button--brand slds-button--small" onClick={ this.openTab.bind(this) }>Tab</button>
                     <button className="slds-button slds-button--brand slds-button--small" onClick={ this.openWindow.bind(this) }>Window</button>

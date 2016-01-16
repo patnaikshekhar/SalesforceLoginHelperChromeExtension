@@ -24294,6 +24294,7 @@
 	  this.name = name;
 	  this.group = group;
 	  this.url = url;
+	  this.environment = environment;
 	  this.username = username;
 	  this.password = password;
 	  this.token = token;
@@ -24432,28 +24433,33 @@
 	                    'td',
 	                    { className: 'slds-lookup__item' },
 	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        { to: '/add/' + this.props.id },
+	                        'a',
+	                        { id: 's01', href: '#', role: 'option', onClick: this.openTab.bind(this) },
 	                        _react2.default.createElement(
-	                            'a',
-	                            { id: 's01', href: '#', role: 'option' },
-	                            _react2.default.createElement(
-	                                'svg',
-	                                { 'aria-hidden': 'true', className: 'slds-icon slds-icon-standard-account slds-icon--small' },
-	                                _react2.default.createElement('use', { xlinkHref: '/assets/icons/standard-sprite/svg/symbols.svg#account' })
-	                            ),
-	                            _react2.default.createElement(
-	                                'span',
-	                                null,
-	                                this.props.name
-	                            ),
-	                            ' '
-	                        )
+	                            'svg',
+	                            { 'aria-hidden': 'true', className: 'slds-icon slds-icon-standard-account slds-icon--small' },
+	                            _react2.default.createElement('use', { xlinkHref: '/assets/icons/standard-sprite/svg/symbols.svg#account' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'span',
+	                            null,
+	                            this.props.name
+	                        ),
+	                        ' '
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'td',
 	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/add/' + this.props.id },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { className: 'slds-button slds-button--brand slds-button--small' },
+	                            'Edit'
+	                        )
+	                    ),
 	                    _react2.default.createElement(
 	                        'button',
 	                        { className: 'slds-button slds-button--brand slds-button--small', onClick: this.deleteRecord.bind(this) },
@@ -24575,7 +24581,6 @@
 	        value: function componentWillMount() {
 
 	            var id = this.props.params.id;
-	            console.log(id);
 	            if (id == 'new') {
 	                this.setState({
 	                    id: null,
@@ -24591,7 +24596,6 @@
 	                var account = _store2.default.accounts.filter(function (a) {
 	                    return a.id == id;
 	                })[0];
-	                console.log(account);
 	                this.setState({
 	                    id: account.id,
 	                    environment: account.environment,
@@ -24618,10 +24622,11 @@
 	            var url = this.state.environment == 'Production' ? 'https://login.salesforce.com' : this.state.environment == 'Sandbox' ? 'https://test.salesforce.com' : this.state.url;
 
 	            if (this.state.id == null) {
-	                _store2.default.addAccount(this.state.name, this.state.group, url, this.environment, this.state.username, this.state.password, this.state.token);
+	                _store2.default.addAccount(this.state.name, this.state.group, url, this.state.environment, this.state.username, this.state.password, this.state.token);
 	            } else {
-	                _store2.default.updateAccount(this.state.id, this.state.name, this.state.group, url, this.environment, this.state.username, this.state.password, this.state.token);
+	                _store2.default.updateAccount(this.state.id, this.state.name, this.state.group, url, this.state.environment, this.state.username, this.state.password, this.state.token);
 	            }
+	            console.log('saved', _store2.default.accounts);
 
 	            this.context.history.pushState('/');
 	        }
@@ -24650,20 +24655,20 @@
 	                                { className: 'slds-select_container' },
 	                                _react2.default.createElement(
 	                                    'select',
-	                                    { id: 'environment', className: 'slds-select', onChange: this.bindState.bind(this, 'environment'), value: this.state.environment },
+	                                    { className: 'slds-select', onChange: this.bindState.bind(this, 'environment'), value: this.state.environment },
 	                                    _react2.default.createElement(
 	                                        'option',
-	                                        null,
+	                                        { value: 'Production' },
 	                                        'Production'
 	                                    ),
 	                                    _react2.default.createElement(
 	                                        'option',
-	                                        null,
+	                                        { value: 'Sandbox' },
 	                                        'Sandbox'
 	                                    ),
 	                                    _react2.default.createElement(
 	                                        'option',
-	                                        null,
+	                                        { value: 'Other' },
 	                                        'Other'
 	                                    )
 	                                )

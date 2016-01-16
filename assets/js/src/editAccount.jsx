@@ -10,7 +10,6 @@ class EditAccount extends React.Component {
     componentWillMount() {
         
         let id = this.props.params.id;
-        console.log(id);
         if (id == 'new') {
             this.setState({
                 id: null,
@@ -24,7 +23,6 @@ class EditAccount extends React.Component {
             });    
         } else {
             let account = Store.accounts.filter(a => a.id == id)[0];
-            console.log(account);
             this.setState({
                 id: account.id,
                 environment: account.environment,
@@ -49,11 +47,11 @@ class EditAccount extends React.Component {
         let url = this.state.environment == 'Production' ? 'https://login.salesforce.com' : (this.state.environment == 'Sandbox' ? 'https://test.salesforce.com' : this.state.url);
         
         if (this.state.id == null) {
-            Store.addAccount(this.state.name, this.state.group, url, this.environment, this.state.username, this.state.password, this.state.token);    
+            Store.addAccount(this.state.name, this.state.group, url, this.state.environment, this.state.username, this.state.password, this.state.token);    
         } else {
-            Store.updateAccount(this.state.id, this.state.name, this.state.group, url, this.environment, this.state.username, this.state.password, this.state.token);
+            Store.updateAccount(this.state.id, this.state.name, this.state.group, url, this.state.environment, this.state.username, this.state.password, this.state.token);
         }
-        
+        console.log('saved', Store.accounts);
         
         this.context.history.pushState('/');
     }
@@ -66,10 +64,10 @@ class EditAccount extends React.Component {
                         <label className="slds-form-element__label" for="orgType">Environment</label>
                         <div className="slds-form-element__control">
                             <div className="slds-select_container">
-                                <select id="environment" className="slds-select" onChange={this.bindState.bind(this, 'environment')} value={this.state.environment}>
-                                    <option>Production</option>
-                                    <option>Sandbox</option>
-                                    <option>Other</option>
+                                <select className="slds-select" onChange={this.bindState.bind(this, 'environment')} value={this.state.environment}>
+                                    <option value='Production'>Production</option>
+                                    <option value='Sandbox'>Sandbox</option>
+                                    <option value='Other'>Other</option>
                                 </select>
                             </div>
                         </div>
