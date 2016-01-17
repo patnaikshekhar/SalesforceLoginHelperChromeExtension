@@ -17,9 +17,16 @@ export default class AccountList extends React.Component {
     }
     
 	componentWillMount() {
-		this.setState({
-			accounts: Store.accounts
-		});
+        
+        this.setState({
+            accounts: []
+        });
+            
+        Store.initialize(() => {
+            this.setState({
+                accounts: Store.accounts
+            });
+        });
 
 		Store.subscribe(this.refresh.bind(this));
 	}

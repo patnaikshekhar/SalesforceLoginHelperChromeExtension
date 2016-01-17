@@ -11,12 +11,34 @@ class Account {
 	}
 }
 
+var storage = chrome.storage.sync;
+
 export var ACTION_CHANGED = 'changed';
 
 var index = 0;
 
 export default {
 	
+    initialize(callback) {
+        console.log('initialize');
+        storage.get('accounts', (accs) => {
+            
+            if ('accounts' in accs) {
+                this.accounts = accs;    
+            } else {
+                this.accounts = [];      
+            }
+            
+            chrome.storage.onChanged.addListener((changes, namespace) => {
+                if ('accounts' in changes) {
+                    this.accounts = changes['accounts'];        
+                }
+            });
+            
+            callback();
+        });
+    },
+    
 	accounts: [],
     // new Account('UAT', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', ''),
     //     new Account('FR Test', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', '')
@@ -32,8 +54,9 @@ export default {
 		this.accounts.push(
 			new Account(this.getLastIndex(), name, group, url, environment, username, password, token)
 		);
-
-		this.dispatch(ACTION_CHANGED, this.accounts);
+        
+        this.dispatch(ACTION_CHANGED, this.accounts);
+        
 		return true;
 	},
     
@@ -66,6 +89,10 @@ export default {
 	},
 
 	dispatch(action, obj) {
-		this.subscribers.forEach((callback) => callback(action, obj))
-	}
+        if (this.action == ACTION_CHANGED) {
+            storage.set({ accounts: this.accounts }, () => {
+                this.dispatch(ACTION_CHANGED, this.accounts);    
+            });
+        }		
+    }
 };

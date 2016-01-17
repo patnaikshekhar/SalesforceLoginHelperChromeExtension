@@ -3,8 +3,10 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import ListAccounts from './listAccounts';
 import EditAccount from './editAccount';
 import Template from './template';
+import Store from './store';
 
 export default class App extends React.Component {
+    
     render() {
        return (
             <Router history={browserHistory}>

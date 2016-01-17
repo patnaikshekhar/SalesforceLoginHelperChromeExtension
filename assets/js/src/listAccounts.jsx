@@ -6,7 +6,6 @@ import { Link } from 'react-router';
 class ListAccounts extends React.Component {
 	
 	componentWillMount() {
-		this.i = 0;
 		this.setState({
 			filter: ''
 		});

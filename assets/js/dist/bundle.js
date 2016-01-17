@@ -19687,6 +19687,10 @@
 
 	var _template2 = _interopRequireDefault(_template);
 
+	var _store = __webpack_require__(209);
+
+	var _store2 = _interopRequireDefault(_store);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24104,7 +24108,6 @@
 		_createClass(ListAccounts, [{
 			key: 'componentWillMount',
 			value: function componentWillMount() {
-				this.i = 0;
 				this.setState({
 					filter: ''
 				});
@@ -24227,8 +24230,16 @@
 		}, {
 			key: 'componentWillMount',
 			value: function componentWillMount() {
+				var _this2 = this;
+
 				this.setState({
-					accounts: _store2.default.accounts
+					accounts: []
+				});
+
+				_store2.default.initialize(function () {
+					_this2.setState({
+						accounts: _store2.default.accounts
+					});
 				});
 
 				_store2.default.subscribe(this.refresh.bind(this));
@@ -24241,11 +24252,11 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this2 = this;
+				var _this3 = this;
 
 				var items = this.state.accounts.filter(function (acc) {
-					if (_this2.props.filter) {
-						if (acc.name.indexOf(_this2.props.filter) > -1) {
+					if (_this3.props.filter) {
+						if (acc.name.indexOf(_this3.props.filter) > -1) {
 							return true;
 						} else {
 							return false;
@@ -24282,82 +24293,110 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Account = function Account(id, name, group, url, environment, username, password, token) {
-	  _classCallCheck(this, Account);
+	    _classCallCheck(this, Account);
 
-	  this.id = id;
-	  this.name = name;
-	  this.group = group;
-	  this.url = url;
-	  this.environment = environment;
-	  this.username = username;
-	  this.password = password;
-	  this.token = token;
+	    this.id = id;
+	    this.name = name;
+	    this.group = group;
+	    this.url = url;
+	    this.environment = environment;
+	    this.username = username;
+	    this.password = password;
+	    this.token = token;
 	};
+
+	var storage = chrome.storage.sync;
 
 	var ACTION_CHANGED = exports.ACTION_CHANGED = 'changed';
 
 	var index = 0;
 
 	exports.default = {
+	    initialize: function initialize(callback) {
+	        var _this = this;
 
-	  accounts: [],
-	  // new Account('UAT', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', ''),
-	  //     new Account('FR Test', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', '')
+	        console.log('initialize');
+	        storage.get('accounts', function (accs) {
 
-	  getLastIndex: function getLastIndex() {
-	    index += 1;
-	    return index;
-	  },
+	            if ('accounts' in accs) {
+	                _this.accounts = accs;
+	            } else {
+	                _this.accounts = [];
+	            }
 
-	  subscribers: [],
+	            chrome.storage.onChanged.addListener(function (changes, namespace) {
+	                if ('accounts' in changes) {
+	                    _this.accounts = changes['accounts'];
+	                }
+	            });
 
-	  addAccount: function addAccount(name, group, url, environment, username, password, token) {
-	    this.accounts.push(new Account(this.getLastIndex(), name, group, url, environment, username, password, token));
+	            callback();
+	        });
+	    },
 
-	    this.dispatch(ACTION_CHANGED, this.accounts);
-	    return true;
-	  },
-	  updateAccount: function updateAccount(id, name, group, url, environment, username, password, token) {
+	    accounts: [],
+	    // new Account('UAT', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', ''),
+	    //     new Account('FR Test', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', '')
 
-	    var account = this.accounts.filter(function (account) {
-	      return id == account.id;
-	    })[0];
-	    account.name = name;
-	    account.group = group;
-	    account.url = url;
-	    account.environment = environment;
-	    account.username = username;
-	    account.password = password;
-	    account.token = token;
+	    getLastIndex: function getLastIndex() {
+	        index += 1;
+	        return index;
+	    },
 
-	    this.dispatch(ACTION_CHANGED, this.accounts);
-	    return true;
-	  },
-	  deleteAccount: function deleteAccount(id) {
-	    this.accounts = this.accounts.filter(function (account) {
-	      return id != account.id;
-	    });
-	    this.dispatch(ACTION_CHANGED, this.accounts);
-	  },
-	  unsubscribe: function unsubscribe(callback) {
-	    this.subscribers = this.subscribers.filter(function (c) {
-	      return c != callback;
-	    });
-	  },
-	  subscribe: function subscribe(callback) {
-	    this.subscribers.push(callback);
-	  },
-	  dispatch: function dispatch(action, obj) {
-	    this.subscribers.forEach(function (callback) {
-	      return callback(action, obj);
-	    });
-	  }
+	    subscribers: [],
+
+	    addAccount: function addAccount(name, group, url, environment, username, password, token) {
+	        this.accounts.push(new Account(this.getLastIndex(), name, group, url, environment, username, password, token));
+
+	        this.dispatch(ACTION_CHANGED, this.accounts);
+
+	        return true;
+	    },
+	    updateAccount: function updateAccount(id, name, group, url, environment, username, password, token) {
+
+	        var account = this.accounts.filter(function (account) {
+	            return id == account.id;
+	        })[0];
+	        account.name = name;
+	        account.group = group;
+	        account.url = url;
+	        account.environment = environment;
+	        account.username = username;
+	        account.password = password;
+	        account.token = token;
+
+	        this.dispatch(ACTION_CHANGED, this.accounts);
+	        return true;
+	    },
+	    deleteAccount: function deleteAccount(id) {
+	        this.accounts = this.accounts.filter(function (account) {
+	            return id != account.id;
+	        });
+	        this.dispatch(ACTION_CHANGED, this.accounts);
+	    },
+	    unsubscribe: function unsubscribe(callback) {
+	        this.subscribers = this.subscribers.filter(function (c) {
+	            return c != callback;
+	        });
+	    },
+	    subscribe: function subscribe(callback) {
+	        this.subscribers.push(callback);
+	    },
+	    dispatch: function dispatch(action, obj) {
+	        var _this2 = this;
+
+	        if (this.action == ACTION_CHANGED) {
+	            storage.set({ accounts: this.accounts }, function () {
+	                _this2.dispatch(ACTION_CHANGED, _this2.accounts);
+	            });
+	        }
+	    }
 	};
 
 /***/ },
