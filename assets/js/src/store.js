@@ -26,11 +26,11 @@ export default {
                 
                 // Check if key is fine, else redo
                 let accounts = obj['accounts'];
-                let i = 0;
+                let index = 0;
                 
                 accounts.forEach((acc) => {
-                   acc.id = i;
-                   i += 1;
+                   acc.id = index;
+                   index += 1;
                 });
                 
                 this.accounts = accounts;
@@ -39,12 +39,6 @@ export default {
             } else {
                 this.accounts = [];      
             }
-            
-            chrome.storage.onChanged.addListener((changes, namespace) => {
-                if ('accounts' in changes) {
-                    this.accounts = changes['accounts'];        
-                }
-            });
         });
     },
     

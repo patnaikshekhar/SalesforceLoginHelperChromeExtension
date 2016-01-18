@@ -24221,11 +24221,17 @@
 		_createClass(AccountList, [{
 			key: 'refresh',
 			value: function refresh(action, accounts) {
-				console.log('Refresh', accounts);
+				console.log('Length on AccountList.refresh', accounts.length);
 				if (this) {
-					this.setState({
-						accounts: accounts
-					});
+					if (accounts.length > 0) {
+						this.setState({
+							accounts: accounts
+						});
+					} else {
+						console.log('Pushing add');
+						console.log(this.context.history);
+						this.context.history.pushState(null, '/add/new');
+					}
 				}
 			}
 		}, {
@@ -24249,8 +24255,6 @@
 			key: 'render',
 			value: function render() {
 				var _this2 = this;
-
-				console.log(this.state.accounts);
 
 				var items = this.state.accounts.filter(function (acc) {
 					if (_this2.props.filter) {
@@ -24281,6 +24285,10 @@
 
 		return AccountList;
 	}(_react2.default.Component);
+
+	AccountList.contextTypes = {
+		history: _react2.default.PropTypes.object
+	};
 
 	exports.default = AccountList;
 
@@ -24326,11 +24334,11 @@
 
 	                    // Check if key is fine, else redo
 	                    var accounts = obj['accounts'];
-	                    var i = 0;
+	                    var index = 0;
 
 	                    accounts.forEach(function (acc) {
-	                        acc.id = i;
-	                        i += 1;
+	                        acc.id = index;
+	                        index += 1;
 	                    });
 
 	                    _this.accounts = accounts;
@@ -24339,12 +24347,6 @@
 	            } else {
 	                _this.accounts = [];
 	            }
-
-	            chrome.storage.onChanged.addListener(function (changes, namespace) {
-	                if ('accounts' in changes) {
-	                    _this.accounts = changes['accounts'];
-	                }
-	            });
 	        });
 	    },
 
@@ -24675,7 +24677,6 @@
 	            } else {
 	                _store2.default.updateAccount(this.state.id, this.state.name, this.state.group, url, this.state.environment, this.state.username, this.state.password, this.state.token);
 	            }
-	            console.log('saved', _store2.default.accounts);
 
 	            this.context.history.pushState('/');
 	        }

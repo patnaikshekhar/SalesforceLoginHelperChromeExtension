@@ -51,7 +51,6 @@ class EditAccount extends React.Component {
         } else {
             Store.updateAccount(this.state.id, this.state.name, this.state.group, url, this.state.environment, this.state.username, this.state.password, this.state.token);
         }
-        console.log('saved', Store.accounts);
         
         this.context.history.pushState('/');
     }

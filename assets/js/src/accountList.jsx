@@ -2,18 +2,24 @@ import React from 'react';
 import Store from './store';
 import AccountListItem from './accountListItem';
 
-export default class AccountList extends React.Component {
+class AccountList extends React.Component {
 
 	constructor() {
 		super();
 	}
     
     refresh(action, accounts) {
-        console.log('Refresh', accounts);
+        console.log('Length on AccountList.refresh', accounts.length);
         if (this) {
-          this.setState({
-			accounts: accounts
-		  });    
+          if (accounts.length > 0) {
+            this.setState({
+			     accounts: accounts
+		    });    
+          } else {
+            console.log('Pushing add');
+            console.log(this.context.history);
+            this.context.history.pushState(null, '/add/new');
+          }
         }
     }
     
@@ -33,7 +39,6 @@ export default class AccountList extends React.Component {
     }
     
 	render() {
-		console.log(this.state.accounts);
         
 		let items = this.state.accounts
 			.filter((acc) => {
@@ -62,3 +67,9 @@ export default class AccountList extends React.Component {
 		);
 	}
 }
+
+AccountList.contextTypes = {
+    history: React.PropTypes.object
+};
+
+export default AccountList;
