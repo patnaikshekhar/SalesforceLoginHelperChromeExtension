@@ -7,6 +7,10 @@ body {
     margin-top: 30px; 
 }
 
+.slight-margin-left {
+    margin-left: 10px;
+}
+
 .accountlist {
     max-height: 550px;
     overflow: scroll;

@@ -1,5 +1,6 @@
 import React from 'react';
 import Store from './store';
+import { Link } from 'react-router';
 
 class EditAccount extends React.Component {
     
@@ -110,6 +111,10 @@ class EditAccount extends React.Component {
                         </div>
                     </div>
                     <button className="slds-button slds-button--brand margin-on-top" onClick={this.saveChanges.bind(this)}>Save</button>
+                    
+                    <Link to="/">
+                        <button className="slds-button slds-button--brand margin-on-top slight-margin-left">Cancel</button>
+                    </Link>
                 </div>
             </div>
         );

@@ -9,15 +9,12 @@ class AccountList extends React.Component {
 	}
     
     refresh(action, accounts) {
-        console.log('Length on AccountList.refresh', accounts.length);
         if (this) {
           if (accounts.length > 0) {
             this.setState({
 			     accounts: accounts
 		    });    
           } else {
-            console.log('Pushing add');
-            console.log(this.context.history);
             this.context.history.pushState(null, '/add/new');
           }
         }

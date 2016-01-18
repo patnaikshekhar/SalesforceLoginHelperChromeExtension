@@ -24221,15 +24221,12 @@
 		_createClass(AccountList, [{
 			key: 'refresh',
 			value: function refresh(action, accounts) {
-				console.log('Length on AccountList.refresh', accounts.length);
 				if (this) {
 					if (accounts.length > 0) {
 						this.setState({
 							accounts: accounts
 						});
 					} else {
-						console.log('Pushing add');
-						console.log(this.context.history);
 						this.context.history.pushState(null, '/add/new');
 					}
 				}
@@ -24610,6 +24607,8 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
+	var _reactRouter = __webpack_require__(160);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24813,6 +24812,15 @@
 	                        'button',
 	                        { className: 'slds-button slds-button--brand margin-on-top', onClick: this.saveChanges.bind(this) },
 	                        'Save'
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { className: 'slds-button slds-button--brand margin-on-top slight-margin-left' },
+	                            'Cancel'
+	                        )
 	                    )
 	                )
 	            );
