@@ -19,12 +19,23 @@ var index = 0;
 
 export default {
 	
-    initialize(callback) {
-        console.log('initialize');
-        storage.get('accounts', (accs) => {
+    initialize() {
+        storage.get('accounts', (obj) => {
             
-            if ('accounts' in accs) {
-                this.accounts = accs;    
+            if ('accounts' in obj) {
+                
+                // Check if key is fine, else redo
+                let accounts = obj['accounts'];
+                let i = 0;
+                
+                accounts.forEach((acc) => {
+                   acc.id = i;
+                   i += 1;
+                });
+                
+                this.accounts = accounts;
+                this.dispatch(ACTION_CHANGED, this.accounts);
+                     
             } else {
                 this.accounts = [];      
             }
@@ -34,8 +45,6 @@ export default {
                     this.accounts = changes['accounts'];        
                 }
             });
-            
-            callback();
         });
     },
     
@@ -89,9 +98,11 @@ export default {
 	},
 
 	dispatch(action, obj) {
-        if (this.action == ACTION_CHANGED) {
-            storage.set({ accounts: this.accounts }, () => {
-                this.dispatch(ACTION_CHANGED, this.accounts);    
+        if (action == ACTION_CHANGED) {
+            storage.set({ accounts: obj }, () => {
+                this.subscribers.forEach((c) => {
+                    c(action, obj);
+                });
             });
         }		
     }

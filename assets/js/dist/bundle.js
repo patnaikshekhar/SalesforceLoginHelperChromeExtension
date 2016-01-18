@@ -24221,6 +24221,7 @@
 		_createClass(AccountList, [{
 			key: 'refresh',
 			value: function refresh(action, accounts) {
+				console.log('Refresh', accounts);
 				if (this) {
 					this.setState({
 						accounts: accounts
@@ -24230,19 +24231,14 @@
 		}, {
 			key: 'componentWillMount',
 			value: function componentWillMount() {
-				var _this2 = this;
 
 				this.setState({
 					accounts: []
 				});
 
-				_store2.default.initialize(function () {
-					_this2.setState({
-						accounts: _store2.default.accounts
-					});
-				});
-
 				_store2.default.subscribe(this.refresh.bind(this));
+
+				_store2.default.initialize();
 			}
 		}, {
 			key: 'componentWillUnmount',
@@ -24252,11 +24248,13 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this3 = this;
+				var _this2 = this;
+
+				console.log(this.state.accounts);
 
 				var items = this.state.accounts.filter(function (acc) {
-					if (_this3.props.filter) {
-						if (acc.name.indexOf(_this3.props.filter) > -1) {
+					if (_this2.props.filter) {
+						if (acc.name.indexOf(_this2.props.filter) > -1) {
 							return true;
 						} else {
 							return false;
@@ -24318,14 +24316,26 @@
 	var index = 0;
 
 	exports.default = {
-	    initialize: function initialize(callback) {
+	    initialize: function initialize() {
 	        var _this = this;
 
-	        console.log('initialize');
-	        storage.get('accounts', function (accs) {
+	        storage.get('accounts', function (obj) {
 
-	            if ('accounts' in accs) {
-	                _this.accounts = accs;
+	            if ('accounts' in obj) {
+	                (function () {
+
+	                    // Check if key is fine, else redo
+	                    var accounts = obj['accounts'];
+	                    var i = 0;
+
+	                    accounts.forEach(function (acc) {
+	                        acc.id = i;
+	                        i += 1;
+	                    });
+
+	                    _this.accounts = accounts;
+	                    _this.dispatch(ACTION_CHANGED, _this.accounts);
+	                })();
 	            } else {
 	                _this.accounts = [];
 	            }
@@ -24335,8 +24345,6 @@
 	                    _this.accounts = changes['accounts'];
 	                }
 	            });
-
-	            callback();
 	        });
 	    },
 
@@ -24391,9 +24399,11 @@
 	    dispatch: function dispatch(action, obj) {
 	        var _this2 = this;
 
-	        if (this.action == ACTION_CHANGED) {
-	            storage.set({ accounts: this.accounts }, function () {
-	                _this2.dispatch(ACTION_CHANGED, _this2.accounts);
+	        if (action == ACTION_CHANGED) {
+	            storage.set({ accounts: obj }, function () {
+	                _this2.subscribers.forEach(function (c) {
+	                    c(action, obj);
+	                });
 	            });
 	        }
 	    }

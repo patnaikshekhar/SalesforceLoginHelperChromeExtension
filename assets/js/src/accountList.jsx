@@ -9,6 +9,7 @@ export default class AccountList extends React.Component {
 	}
     
     refresh(action, accounts) {
+        console.log('Refresh', accounts);
         if (this) {
           this.setState({
 			accounts: accounts
@@ -21,14 +22,10 @@ export default class AccountList extends React.Component {
         this.setState({
             accounts: []
         });
-            
-        Store.initialize(() => {
-            this.setState({
-                accounts: Store.accounts
-            });
-        });
-
-		Store.subscribe(this.refresh.bind(this));
+        
+        Store.subscribe(this.refresh.bind(this));
+        
+        Store.initialize();
 	}
     
     componentWillUnmount() {
@@ -36,7 +33,8 @@ export default class AccountList extends React.Component {
     }
     
 	render() {
-		
+		console.log(this.state.accounts);
+        
 		let items = this.state.accounts
 			.filter((acc) => {
 				if (this.props.filter) {
