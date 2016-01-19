@@ -24505,13 +24505,21 @@
 	                        _react2.default.createElement(
 	                            'button',
 	                            { className: 'slds-button slds-button--brand slds-button--small' },
-	                            'Edit'
+	                            _react2.default.createElement(
+	                                'svg',
+	                                { 'aria-hidden': 'true', className: 'slds-button__icon--stateful' },
+	                                _react2.default.createElement('use', { xlinkHref: '/assets/icons/utility-sprite/svg/symbols.svg#edit' })
+	                            )
 	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'button',
-	                        { className: 'slds-button slds-button--brand slds-button--small', onClick: this.deleteRecord.bind(this) },
-	                        'Delete'
+	                        { className: 'slds-button slds-button--brand slds-button--small slight-margin-left', onClick: this.deleteRecord.bind(this) },
+	                        _react2.default.createElement(
+	                            'svg',
+	                            { 'aria-hidden': 'true', className: 'slds-button__icon--stateful' },
+	                            _react2.default.createElement('use', { xlinkHref: '/assets/icons/utility-sprite/svg/symbols.svg#delete' })
+	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'button',

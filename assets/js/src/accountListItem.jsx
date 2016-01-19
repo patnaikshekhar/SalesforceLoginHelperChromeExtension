@@ -33,9 +33,17 @@ export default class AccountListItem extends React.Component {
 			    </td>
 			    <td>
                     <Link to={`/add/${this.props.id}`}>
-                        <button className="slds-button slds-button--brand slds-button--small">Edit</button>
+                        <button className="slds-button slds-button--brand slds-button--small">
+                            <svg aria-hidden="true" className="slds-button__icon--stateful">
+                                <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                            </svg>
+                        </button>
                     </Link>
-                    <button className="slds-button slds-button--brand slds-button--small" onClick={ this.deleteRecord.bind(this) }>Delete</button>
+                    <button className="slds-button slds-button--brand slds-button--small slight-margin-left" onClick={ this.deleteRecord.bind(this) }>
+                        <svg aria-hidden="true" className="slds-button__icon--stateful">
+                            <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
+                        </svg>
+                    </button>
 			        <button className="slds-button slds-button--brand slds-button--small" onClick={ this.openTab.bind(this) }>Tab</button>
                     <button className="slds-button slds-button--brand slds-button--small" onClick={ this.openWindow.bind(this) }>Window</button>
                     <button className="slds-button slds-button--brand slds-button--small" onClick={ this.openIncognito.bind(this) }>Incognito</button>
