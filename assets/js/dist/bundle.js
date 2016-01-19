@@ -24504,7 +24504,7 @@
 	                        { to: '/add/' + this.props.id },
 	                        _react2.default.createElement(
 	                            'button',
-	                            { className: 'slds-button slds-button--brand slds-button--small' },
+	                            { className: 'slds-button slds-button--neutral slds-button--small' },
 	                            _react2.default.createElement(
 	                                'svg',
 	                                { 'aria-hidden': 'true', className: 'slds-button__icon--stateful' },
@@ -24514,7 +24514,7 @@
 	                    ),
 	                    _react2.default.createElement(
 	                        'button',
-	                        { className: 'slds-button slds-button--brand slds-button--small slight-margin-left', onClick: this.deleteRecord.bind(this) },
+	                        { className: 'slds-button slds-button--destructive slds-button--small slight-margin-left', onClick: this.deleteRecord.bind(this) },
 	                        _react2.default.createElement(
 	                            'svg',
 	                            { 'aria-hidden': 'true', className: 'slds-button__icon--stateful' },

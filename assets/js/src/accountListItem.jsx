@@ -33,13 +33,13 @@ export default class AccountListItem extends React.Component {
 			    </td>
 			    <td>
                     <Link to={`/add/${this.props.id}`}>
-                        <button className="slds-button slds-button--brand slds-button--small">
+                        <button className="slds-button slds-button--neutral slds-button--small">
                             <svg aria-hidden="true" className="slds-button__icon--stateful">
                                 <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
                             </svg>
                         </button>
                     </Link>
-                    <button className="slds-button slds-button--brand slds-button--small slight-margin-left" onClick={ this.deleteRecord.bind(this) }>
+                    <button className="slds-button slds-button--destructive slds-button--small slight-margin-left" onClick={ this.deleteRecord.bind(this) }>
                         <svg aria-hidden="true" className="slds-button__icon--stateful">
                             <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
                         </svg>
