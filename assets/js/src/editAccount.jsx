@@ -50,6 +50,7 @@ class EditAccount extends React.Component {
         this.setState(Object.assign(this.state, newState));
     }
     
+    // Toggle the show password state which shows the text in token and password
     toogleShowPassword() {
         var state = this.state;
         
@@ -135,7 +136,7 @@ class EditAccount extends React.Component {
                         <button className="slds-button slds-button--brand margin-on-top slight-margin-left">Cancel</button>
                     </Link>
                     
-                    <button className="slight-margin-left slds-button slds-button--destructive margin-on-top" onClick={ this.toogleShowPassword.bind(this) }>Show Password</button>
+                    <button className="slight-margin-left slds-button slds-button--destructive margin-on-top" onClick={ this.toogleShowPassword.bind(this) }>{this.state.showPassword ? 'Hide' : 'Show' } Password</button>
                 </div>
             </div>
         );

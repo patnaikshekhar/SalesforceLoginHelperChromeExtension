@@ -24679,6 +24679,9 @@
 	            newState[stateVar] = e.target.value;
 	            this.setState(Object.assign(this.state, newState));
 	        }
+
+	        // Toggle the show password state which shows the text in token and password
+
 	    }, {
 	        key: 'toogleShowPassword',
 	        value: function toogleShowPassword() {
@@ -24852,7 +24855,8 @@
 	                    _react2.default.createElement(
 	                        'button',
 	                        { className: 'slight-margin-left slds-button slds-button--destructive margin-on-top', onClick: this.toogleShowPassword.bind(this) },
-	                        'Show Password'
+	                        this.state.showPassword ? 'Hide' : 'Show',
+	                        ' Password'
 	                    )
 	                )
 	            );
