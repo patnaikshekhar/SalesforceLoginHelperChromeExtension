@@ -11,8 +11,10 @@ class EditAccount extends React.Component {
     componentWillMount() {
         
         let id = this.props.params.id;
+        var state;
+        
         if (id == 'new') {
-            this.setState({
+            state = {
                 id: null,
                 environment: "Production",
                 name: null,
@@ -21,10 +23,10 @@ class EditAccount extends React.Component {
                 token: null,
                 username: null,
                 password: null
-            });    
+            };    
         } else {
             let account = Store.accounts.filter(a => a.id == id)[0];
-            this.setState({
+            state = {
                 id: account.id,
                 environment: account.environment,
                 name: account.name,
@@ -33,14 +35,31 @@ class EditAccount extends React.Component {
                 token: account.token,
                 username: account.username,
                 password: account.password
-            });    
+            };    
         }
+        
+        // Set show password to false so that password is not shown by default
+        state['showPassword'] = false;
+        
+        this.setState(state);
     }
     
     bindState(stateVar, e) {
         let newState = {};
         newState[stateVar] = e.target.value;
         this.setState(Object.assign(this.state, newState));
+    }
+    
+    toogleShowPassword() {
+        var state = this.state;
+        
+        if (state.showPassword) {
+            state['showPassword'] = false;
+        } else {
+            state['showPassword'] = true;
+        }
+        console.log('Here', state);
+        this.setState(state);
     }
     
     saveChanges(e) {
@@ -76,38 +95,38 @@ class EditAccount extends React.Component {
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="url">URL</label>
                         <div className="slds-form-element__control">
-                            <input id="url" className="slds-input" type="text" placeholder="URL" onChange={this.bindState.bind(this, 'url')} value={this.state.url}/>
+                            <input className="slds-input" type="text" placeholder="URL" onChange={this.bindState.bind(this, 'url')} value={this.state.url}/>
                         </div>
                     </div> :
                     null }
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="username">Username</label>
                         <div className="slds-form-element__control">
-                            <input id="username" className="slds-input" type="text" placeholder="Username" onChange={this.bindState.bind(this, 'username')} value={this.state.username} />
+                            <input className="slds-input" type="text" placeholder="Username" onChange={this.bindState.bind(this, 'username')} value={this.state.username} />
                         </div>
                     </div>
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="password">Password</label>
                         <div className="slds-form-element__control">
-                            <input id="username" className="slds-input" type="password" placeholder="Password" onChange={this.bindState.bind(this, 'password')} value={this.state.password} />
+                            <input className="slds-input" type={ this.state.showPassword ? 'text' : 'password' } placeholder="Password" onChange={this.bindState.bind(this, 'password')} value={this.state.password} />
                         </div>
                     </div>
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="token">Token</label>
                         <div className="slds-form-element__control">
-                            <input id="token" className="slds-input" type="password" placeholder="Token" onChange={this.bindState.bind(this, 'token')} value={this.state.token} />
+                            <input className="slds-input" type={ this.state.showPassword ? 'text' : 'password' } placeholder="Token" onChange={this.bindState.bind(this, 'token')} value={this.state.token} />
                         </div>
                     </div>
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="name">Name</label>
                         <div className="slds-form-element__control">
-                            <input id="name" className="slds-input" type="text" placeholder="Name" onChange={this.bindState.bind(this, 'name')} value={this.state.name} />
+                            <input className="slds-input" type="text" placeholder="Name" onChange={this.bindState.bind(this, 'name')} value={this.state.name} />
                         </div>
                     </div>
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="group">Group</label>
                         <div className="slds-form-element__control">
-                            <input id="group" className="slds-input" type="text" placeholder="Group" onChange={this.bindState.bind(this, 'group')} value={this.state.group} />
+                            <input className="slds-input" type="text" placeholder="Group" onChange={this.bindState.bind(this, 'group')} value={this.state.group} />
                         </div>
                     </div>
                     <button className="slds-button slds-button--brand margin-on-top" onClick={this.saveChanges.bind(this)}>Save</button>
@@ -115,6 +134,8 @@ class EditAccount extends React.Component {
                     <Link to="/">
                         <button className="slds-button slds-button--brand margin-on-top slight-margin-left">Cancel</button>
                     </Link>
+                    
+                    <button className="slight-margin-left slds-button slds-button--destructive margin-on-top" onClick={ this.toogleShowPassword.bind(this) }>Show Password</button>
                 </div>
             </div>
         );

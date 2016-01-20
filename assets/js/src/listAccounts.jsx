@@ -42,9 +42,6 @@ class ListAccounts extends React.Component {
 		  		<div className="slds-col slds-size--1-of-1 margin-on-top accountlist">
 		  			<AccountList filter={ this.state.filter }/>
 		  		</div>
-		  		<div className="slds-col slds-size--1-of-1">
-		  			
-		  		</div>
 			</div>
 		);
 	}

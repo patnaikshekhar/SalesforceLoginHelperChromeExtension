@@ -24166,8 +24166,7 @@
 						'div',
 						{ className: 'slds-col slds-size--1-of-1 margin-on-top accountlist' },
 						_react2.default.createElement(_accountList2.default, { filter: this.state.filter })
-					),
-					_react2.default.createElement('div', { className: 'slds-col slds-size--1-of-1' })
+					)
 				);
 			}
 		}]);
@@ -24639,8 +24638,10 @@
 	        value: function componentWillMount() {
 
 	            var id = this.props.params.id;
+	            var state;
+
 	            if (id == 'new') {
-	                this.setState({
+	                state = {
 	                    id: null,
 	                    environment: "Production",
 	                    name: null,
@@ -24649,12 +24650,12 @@
 	                    token: null,
 	                    username: null,
 	                    password: null
-	                });
+	                };
 	            } else {
 	                var account = _store2.default.accounts.filter(function (a) {
 	                    return a.id == id;
 	                })[0];
-	                this.setState({
+	                state = {
 	                    id: account.id,
 	                    environment: account.environment,
 	                    name: account.name,
@@ -24663,8 +24664,13 @@
 	                    token: account.token,
 	                    username: account.username,
 	                    password: account.password
-	                });
+	                };
 	            }
+
+	            // Set show password to false so that password is not shown by default
+	            state['showPassword'] = false;
+
+	            this.setState(state);
 	        }
 	    }, {
 	        key: 'bindState',
@@ -24672,6 +24678,19 @@
 	            var newState = {};
 	            newState[stateVar] = e.target.value;
 	            this.setState(Object.assign(this.state, newState));
+	        }
+	    }, {
+	        key: 'toogleShowPassword',
+	        value: function toogleShowPassword() {
+	            var state = this.state;
+
+	            if (state.showPassword) {
+	                state['showPassword'] = false;
+	            } else {
+	                state['showPassword'] = true;
+	            }
+	            console.log('Here', state);
+	            this.setState(state);
 	        }
 	    }, {
 	        key: 'saveChanges',
@@ -24743,7 +24762,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { id: 'url', className: 'slds-input', type: 'text', placeholder: 'URL', onChange: this.bindState.bind(this, 'url'), value: this.state.url })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'URL', onChange: this.bindState.bind(this, 'url'), value: this.state.url })
 	                        )
 	                    ) : null,
 	                    _react2.default.createElement(
@@ -24757,7 +24776,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { id: 'username', className: 'slds-input', type: 'text', placeholder: 'Username', onChange: this.bindState.bind(this, 'username'), value: this.state.username })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Username', onChange: this.bindState.bind(this, 'username'), value: this.state.username })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -24771,7 +24790,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { id: 'username', className: 'slds-input', type: 'password', placeholder: 'Password', onChange: this.bindState.bind(this, 'password'), value: this.state.password })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: this.state.showPassword ? 'text' : 'password', placeholder: 'Password', onChange: this.bindState.bind(this, 'password'), value: this.state.password })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -24785,7 +24804,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { id: 'token', className: 'slds-input', type: 'password', placeholder: 'Token', onChange: this.bindState.bind(this, 'token'), value: this.state.token })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: this.state.showPassword ? 'text' : 'password', placeholder: 'Token', onChange: this.bindState.bind(this, 'token'), value: this.state.token })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -24799,7 +24818,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { id: 'name', className: 'slds-input', type: 'text', placeholder: 'Name', onChange: this.bindState.bind(this, 'name'), value: this.state.name })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Name', onChange: this.bindState.bind(this, 'name'), value: this.state.name })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -24813,7 +24832,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { id: 'group', className: 'slds-input', type: 'text', placeholder: 'Group', onChange: this.bindState.bind(this, 'group'), value: this.state.group })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Group', onChange: this.bindState.bind(this, 'group'), value: this.state.group })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -24829,6 +24848,11 @@
 	                            { className: 'slds-button slds-button--brand margin-on-top slight-margin-left' },
 	                            'Cancel'
 	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'slight-margin-left slds-button slds-button--destructive margin-on-top', onClick: this.toogleShowPassword.bind(this) },
+	                        'Show Password'
 	                    )
 	                )
 	            );
