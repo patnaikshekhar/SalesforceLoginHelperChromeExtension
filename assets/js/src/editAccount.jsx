@@ -144,12 +144,12 @@ class EditAccount extends React.Component {
                             <input className="slds-input" type={ this.state.showPassword ? 'text' : 'password' } placeholder="Password" onChange={this.bindState.bind(this, 'password')} value={this.state.password} />
                         </div>
                     </div>
-                    <div className="slds-form-element">
+                    {/*<div className="slds-form-element">
                         <label className="slds-form-element__label" for="token">Token</label>
                         <div className="slds-form-element__control">
                             <input className="slds-input" type={ this.state.showPassword ? 'text' : 'password' } placeholder="Token" onChange={this.bindState.bind(this, 'token')} value={this.state.token} />
                         </div>
-                    </div>
+                    </div>*/}
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="name">Name</label>
                         <div className="slds-form-element__control">

@@ -24867,20 +24867,6 @@
 	                        { className: 'slds-form-element' },
 	                        _react2.default.createElement(
 	                            'label',
-	                            { className: 'slds-form-element__label', 'for': 'token' },
-	                            'Token'
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { className: 'slds-input', type: this.state.showPassword ? 'text' : 'password', placeholder: 'Token', onChange: this.bindState.bind(this, 'token'), value: this.state.token })
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'slds-form-element' },
-	                        _react2.default.createElement(
-	                            'label',
 	                            { className: 'slds-form-element__label', 'for': 'name' },
 	                            'Name'
 	                        ),
