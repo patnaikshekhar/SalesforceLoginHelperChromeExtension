@@ -24263,7 +24263,7 @@
 						return true;
 					}
 				}).map(function (acc) {
-					return _react2.default.createElement(_accountListItem2.default, { name: acc.name, group: acc.group, url: acc.url, environment: acc.environment, username: acc.username, password: acc.password, key: acc.id, id: acc.id });
+					return _react2.default.createElement(_accountListItem2.default, { name: acc.name, url: acc.url, environment: acc.environment, username: acc.username, password: acc.password, key: acc.id, id: acc.id });
 				});
 
 				return _react2.default.createElement(
@@ -24300,12 +24300,11 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Account = function Account(id, name, group, url, environment, username, password, token) {
+	var Account = function Account(id, name, url, environment, username, password, token) {
 	    _classCallCheck(this, Account);
 
 	    this.id = id;
 	    this.name = name;
-	    this.group = group;
 	    this.url = url;
 	    this.environment = environment;
 	    this.username = username;
@@ -24357,20 +24356,19 @@
 
 	    subscribers: [],
 
-	    addAccount: function addAccount(name, group, url, environment, username, password, token) {
-	        this.accounts.push(new Account(this.getLastIndex(), name, group, url, environment, username, password, token));
+	    addAccount: function addAccount(name, url, environment, username, password, token) {
+	        this.accounts.push(new Account(this.getLastIndex(), name, url, environment, username, password, token));
 
 	        this.dispatch(ACTION_CHANGED, this.accounts);
 
 	        return true;
 	    },
-	    updateAccount: function updateAccount(id, name, group, url, environment, username, password, token) {
+	    updateAccount: function updateAccount(id, name, url, environment, username, password, token) {
 
 	        var account = this.accounts.filter(function (account) {
 	            return id == account.id;
 	        })[0];
 	        account.name = name;
-	        account.group = group;
 	        account.url = url;
 	        account.environment = environment;
 	        account.username = username;
@@ -24645,7 +24643,6 @@
 	                    id: null,
 	                    environment: "Production",
 	                    name: null,
-	                    group: null,
 	                    url: null,
 	                    token: null,
 	                    username: null,
@@ -24659,7 +24656,6 @@
 	                    id: account.id,
 	                    environment: account.environment,
 	                    name: account.name,
-	                    group: account.group,
 	                    url: account.url,
 	                    token: account.token,
 	                    username: account.username,
@@ -24702,9 +24698,9 @@
 	            var url = this.state.environment == 'Production' ? 'https://login.salesforce.com' : this.state.environment == 'Sandbox' ? 'https://test.salesforce.com' : this.state.url;
 
 	            if (this.state.id == null) {
-	                _store2.default.addAccount(this.state.name, this.state.group, url, this.state.environment, this.state.username, this.state.password, this.state.token);
+	                _store2.default.addAccount(this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
 	            } else {
-	                _store2.default.updateAccount(this.state.id, this.state.name, this.state.group, url, this.state.environment, this.state.username, this.state.password, this.state.token);
+	                _store2.default.updateAccount(this.state.id, this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
 	            }
 
 	            this.context.history.pushState('/');
@@ -24822,20 +24818,6 @@
 	                            'div',
 	                            { className: 'slds-form-element__control' },
 	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Name', onChange: this.bindState.bind(this, 'name'), value: this.state.name })
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'slds-form-element' },
-	                        _react2.default.createElement(
-	                            'label',
-	                            { className: 'slds-form-element__label', 'for': 'group' },
-	                            'Group'
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Group', onChange: this.bindState.bind(this, 'group'), value: this.state.group })
 	                        )
 	                    ),
 	                    _react2.default.createElement(

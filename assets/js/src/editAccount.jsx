@@ -18,7 +18,6 @@ class EditAccount extends React.Component {
                 id: null,
                 environment: "Production",
                 name: null,
-                group: null,
                 url: null,
                 token: null,
                 username: null,
@@ -30,7 +29,6 @@ class EditAccount extends React.Component {
                 id: account.id,
                 environment: account.environment,
                 name: account.name,
-                group: account.group,
                 url: account.url,
                 token: account.token,
                 username: account.username,
@@ -68,9 +66,9 @@ class EditAccount extends React.Component {
         let url = this.state.environment == 'Production' ? 'https://login.salesforce.com' : (this.state.environment == 'Sandbox' ? 'https://test.salesforce.com' : this.state.url);
         
         if (this.state.id == null) {
-            Store.addAccount(this.state.name, this.state.group, url, this.state.environment, this.state.username, this.state.password, this.state.token);    
+            Store.addAccount(this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);    
         } else {
-            Store.updateAccount(this.state.id, this.state.name, this.state.group, url, this.state.environment, this.state.username, this.state.password, this.state.token);
+            Store.updateAccount(this.state.id, this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
         }
         
         this.context.history.pushState('/');
@@ -122,12 +120,6 @@ class EditAccount extends React.Component {
                         <label className="slds-form-element__label" for="name">Name</label>
                         <div className="slds-form-element__control">
                             <input className="slds-input" type="text" placeholder="Name" onChange={this.bindState.bind(this, 'name')} value={this.state.name} />
-                        </div>
-                    </div>
-                    <div className="slds-form-element">
-                        <label className="slds-form-element__label" for="group">Group</label>
-                        <div className="slds-form-element__control">
-                            <input className="slds-input" type="text" placeholder="Group" onChange={this.bindState.bind(this, 'group')} value={this.state.group} />
                         </div>
                     </div>
                     <button className="slds-button slds-button--brand margin-on-top" onClick={this.saveChanges.bind(this)}>Save</button>

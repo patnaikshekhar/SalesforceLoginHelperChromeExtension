@@ -50,7 +50,7 @@ class AccountList extends React.Component {
 				}
 			})
 			.map((acc) => 
-				<AccountListItem name={acc.name} group={acc.group} url={acc.url} environment={acc.environment} username={acc.username} password={acc.password} key={acc.id} id={acc.id} /> 
+				<AccountListItem name={acc.name} url={acc.url} environment={acc.environment} username={acc.username} password={acc.password} key={acc.id} id={acc.id} /> 
 			);
 
 		return (

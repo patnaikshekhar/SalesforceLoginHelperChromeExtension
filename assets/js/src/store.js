@@ -1,8 +1,7 @@
 class Account {
-	constructor(id, name, group, url, environment, username, password, token) {
+	constructor(id, name, url, environment, username, password, token) {
         this.id = id;
 		this.name = name;
-		this.group = group;
 		this.url = url;
         this.environment = environment;
 		this.username = username;
@@ -53,9 +52,9 @@ export default {
     
 	subscribers: [],
 
-	addAccount(name, group, url, environment, username, password, token) {
+	addAccount(name, url, environment, username, password, token) {
 		this.accounts.push(
-			new Account(this.getLastIndex(), name, group, url, environment, username, password, token)
+			new Account(this.getLastIndex(), name, url, environment, username, password, token)
 		);
         
         this.dispatch(ACTION_CHANGED, this.accounts);
@@ -63,11 +62,10 @@ export default {
 		return true;
 	},
     
-    updateAccount(id, name, group, url, environment, username, password, token) {
+    updateAccount(id, name, url, environment, username, password, token) {
         
         let account = this.accounts.filter(account => id == account.id)[0];
         account.name = name;
-        account.group = group;
         account.url = url;
         account.environment = environment;
         account.username = username;
