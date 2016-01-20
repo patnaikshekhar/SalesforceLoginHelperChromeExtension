@@ -6,14 +6,17 @@ import { Link } from 'react-router';
 export default class AccountListItem extends React.Component {
     
     openTab() {
+        Store.updateLastAccessed(this.props.id);
         Helper.openWindow(this.props.url, this.props.username, this.props.password, false, true);   
     }
     
     openWindow() {
+        Store.updateLastAccessed(this.props.id);
         Helper.openWindow(this.props.url, this.props.username, this.props.password);   
     }
     
     openIncognito() {
+        Store.updateLastAccessed(this.props.id);
         Helper.openWindow(this.props.url, this.props.username, this.props.password, true);   
     }
     

@@ -57,7 +57,6 @@ class EditAccount extends React.Component {
         } else {
             state['showPassword'] = true;
         }
-        console.log('Here', state);
         this.setState(state);
     }
     
@@ -69,6 +68,7 @@ class EditAccount extends React.Component {
             Store.addAccount(this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);    
         } else {
             Store.updateAccount(this.state.id, this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
+            Store.updateLastAccessed(this.state.id);
         }
         
         this.context.history.pushState('/');

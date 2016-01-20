@@ -1,5 +1,5 @@
 class Account {
-	constructor(id, name, url, environment, username, password, token) {
+	constructor(id, name, url, environment, username, password, token, lastAccessed) {
         this.id = id;
 		this.name = name;
 		this.url = url;
@@ -7,6 +7,7 @@ class Account {
 		this.username = username;
 		this.password = password;
         this.token = token;
+        this.lastAccessed = lastAccessed;
 	}
 }
 
@@ -17,7 +18,7 @@ export var ACTION_CHANGED = 'changed';
 var index = 0;
 
 export default {
-	
+    
     initialize() {
         storage.get('accounts', (obj) => {
             
@@ -28,6 +29,12 @@ export default {
                 let index = 0;
                 
                 accounts.forEach((acc) => {
+                   
+                   // Update the Last Accessed date if it is null
+                   if (!acc.lastAccessed) {
+                        acc.lastAccessed = Date.now();    
+                   }
+                   
                    acc.id = index;
                    index += 1;
                 });
@@ -42,9 +49,7 @@ export default {
     },
     
 	accounts: [],
-    // new Account('UAT', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', ''),
-    //     new Account('FR Test', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', '')
-    
+   
     getLastIndex: function() {
         index += 1
         return index;
@@ -54,7 +59,7 @@ export default {
 
 	addAccount(name, url, environment, username, password, token) {
 		this.accounts.push(
-			new Account(this.getLastIndex(), name, url, environment, username, password, token)
+			new Account(this.getLastIndex(), name, url, environment, username, password, token, Date.now())
 		);
         
         this.dispatch(ACTION_CHANGED, this.accounts);
@@ -91,11 +96,33 @@ export default {
 
 	dispatch(action, obj) {
         if (action == ACTION_CHANGED) {
-            storage.set({ accounts: obj }, () => {
+            
+            // Sort Accounts before dispatching
+            this.sortAccounts();
+            
+            storage.set({ accounts: this.accounts }, () => {
                 this.subscribers.forEach((c) => {
-                    c(action, obj);
+                    c(action, this.accounts);
                 });
             });
         }		
+    },
+    
+    // Sort accounts by last accessed
+    sortAccounts() {        
+        this.accounts.sort((a1, a2) => a2.lastAccessed - a1.lastAccessed);
+    },
+    
+    updateLastAccessed(id) {
+        this.accounts = this.accounts.map((acc) => {
+            if (acc.id == id) {
+                acc.lastAccessed = Date.now();
+            } 
+            
+            return acc;
+        });
+        
+        this.dispatch(ACTION_CHANGED, this.accounts);
+		return true;
     }
 };

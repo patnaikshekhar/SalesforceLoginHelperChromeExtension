@@ -24300,7 +24300,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Account = function Account(id, name, url, environment, username, password, token) {
+	var Account = function Account(id, name, url, environment, username, password, token, lastAccessed) {
 	    _classCallCheck(this, Account);
 
 	    this.id = id;
@@ -24310,6 +24310,7 @@
 	    this.username = username;
 	    this.password = password;
 	    this.token = token;
+	    this.lastAccessed = lastAccessed;
 	};
 
 	var storage = chrome.storage.sync;
@@ -24332,6 +24333,12 @@
 	                    var index = 0;
 
 	                    accounts.forEach(function (acc) {
+
+	                        // Update the Last Accessed date if it is null
+	                        if (!acc.lastAccessed) {
+	                            acc.lastAccessed = Date.now();
+	                        }
+
 	                        acc.id = index;
 	                        index += 1;
 	                    });
@@ -24346,8 +24353,6 @@
 	    },
 
 	    accounts: [],
-	    // new Account('UAT', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', ''),
-	    //     new Account('FR Test', 'Syngenta', 'https://login.salesforce.com', 'test', 'test', '')
 
 	    getLastIndex: function getLastIndex() {
 	        index += 1;
@@ -24357,7 +24362,7 @@
 	    subscribers: [],
 
 	    addAccount: function addAccount(name, url, environment, username, password, token) {
-	        this.accounts.push(new Account(this.getLastIndex(), name, url, environment, username, password, token));
+	        this.accounts.push(new Account(this.getLastIndex(), name, url, environment, username, password, token, Date.now()));
 
 	        this.dispatch(ACTION_CHANGED, this.accounts);
 
@@ -24396,12 +24401,35 @@
 	        var _this2 = this;
 
 	        if (action == ACTION_CHANGED) {
-	            storage.set({ accounts: obj }, function () {
+
+	            // Sort Accounts before dispatching
+	            this.sortAccounts();
+
+	            storage.set({ accounts: this.accounts }, function () {
 	                _this2.subscribers.forEach(function (c) {
-	                    c(action, obj);
+	                    c(action, _this2.accounts);
 	                });
 	            });
 	        }
+	    },
+
+	    // Sort accounts by last accessed
+	    sortAccounts: function sortAccounts() {
+	        this.accounts.sort(function (a1, a2) {
+	            return a2.lastAccessed - a1.lastAccessed;
+	        });
+	    },
+	    updateLastAccessed: function updateLastAccessed(id) {
+	        this.accounts = this.accounts.map(function (acc) {
+	            if (acc.id == id) {
+	                acc.lastAccessed = Date.now();
+	            }
+
+	            return acc;
+	        });
+
+	        this.dispatch(ACTION_CHANGED, this.accounts);
+	        return true;
 	    }
 	};
 
@@ -24451,16 +24479,19 @@
 	    _createClass(AccountListItem, [{
 	        key: 'openTab',
 	        value: function openTab() {
+	            _store2.default.updateLastAccessed(this.props.id);
 	            _helper2.default.openWindow(this.props.url, this.props.username, this.props.password, false, true);
 	        }
 	    }, {
 	        key: 'openWindow',
 	        value: function openWindow() {
+	            _store2.default.updateLastAccessed(this.props.id);
 	            _helper2.default.openWindow(this.props.url, this.props.username, this.props.password);
 	        }
 	    }, {
 	        key: 'openIncognito',
 	        value: function openIncognito() {
+	            _store2.default.updateLastAccessed(this.props.id);
 	            _helper2.default.openWindow(this.props.url, this.props.username, this.props.password, true);
 	        }
 	    }, {
@@ -24688,7 +24719,6 @@
 	            } else {
 	                state['showPassword'] = true;
 	            }
-	            console.log('Here', state);
 	            this.setState(state);
 	        }
 	    }, {
@@ -24701,6 +24731,7 @@
 	                _store2.default.addAccount(this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
 	            } else {
 	                _store2.default.updateAccount(this.state.id, this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
+	                _store2.default.updateLastAccessed(this.state.id);
 	            }
 
 	            this.context.history.pushState('/');
