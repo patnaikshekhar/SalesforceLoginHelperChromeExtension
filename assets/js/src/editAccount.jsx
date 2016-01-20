@@ -1,6 +1,7 @@
 import React from 'react';
 import Store from './store';
 import { Link } from 'react-router';
+import ErrorDialog from './errorDialog';
 
 class EditAccount extends React.Component {
     
@@ -60,23 +61,56 @@ class EditAccount extends React.Component {
         this.setState(state);
     }
     
-    saveChanges(e) {
+    validate() {
         
-        let url = this.state.environment == 'Production' ? 'https://login.salesforce.com' : (this.state.environment == 'Sandbox' ? 'https://test.salesforce.com' : this.state.url);
+        let state = this.state;
         
-        if (this.state.id == null) {
-            Store.addAccount(this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);    
-        } else {
-            Store.updateAccount(this.state.id, this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
-            Store.updateLastAccessed(this.state.id);
+        state.error = '';
+        
+        if (!state.username) {
+            state.error += 'Username is required. ';
         }
         
-        this.context.history.pushState('/');
+        if (!state.password) {
+            state.error += 'Password is required. ';
+        }
+        
+        if (!state.name) {
+            state.error += 'Name is required.';
+        }   
+        
+        if (state.error == '') {
+            state.error = null;
+            return true;    
+        } else {
+            this.setState(state);
+            return false;
+        }
+        
+    }
+    
+    saveChanges(e) {
+        
+        if (this.validate()) {
+            let url = this.state.environment == 'Production' ? 'https://login.salesforce.com' : (this.state.environment == 'Sandbox' ? 'https://test.salesforce.com' : this.state.url);
+            
+            if (this.state.id == null) {
+                Store.addAccount(this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);    
+            } else {
+                Store.updateAccount(this.state.id, this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
+                Store.updateLastAccessed(this.state.id);
+            }
+            
+            this.context.history.pushState('/');
+        }
     }
     
     render() {
         return (
             <div className="slds-grid slds-wrap">
+                <div className="slds-col slds-size--1-of-1 margin-on-top slds-col--padded slds-form--stacked">
+                    <ErrorDialog message={this.state.error} />
+                </div>
 		  		<div className="slds-col slds-size--1-of-1 margin-on-top slds-col--padded slds-form--stacked">
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="orgType">Environment</label>

@@ -19683,7 +19683,7 @@
 
 	var _editAccount2 = _interopRequireDefault(_editAccount);
 
-	var _template = __webpack_require__(213);
+	var _template = __webpack_require__(214);
 
 	var _template2 = _interopRequireDefault(_template);
 
@@ -24645,6 +24645,10 @@
 
 	var _reactRouter = __webpack_require__(160);
 
+	var _errorDialog = __webpack_require__(213);
+
+	var _errorDialog2 = _interopRequireDefault(_errorDialog);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24722,19 +24726,49 @@
 	            this.setState(state);
 	        }
 	    }, {
+	        key: 'validate',
+	        value: function validate() {
+
+	            var state = this.state;
+
+	            state.error = '';
+
+	            if (!state.username) {
+	                state.error += 'Username is required. ';
+	            }
+
+	            if (!state.password) {
+	                state.error += 'Password is required. ';
+	            }
+
+	            if (!state.name) {
+	                state.error += 'Name is required.';
+	            }
+
+	            if (state.error == '') {
+	                state.error = null;
+	                return true;
+	            } else {
+	                this.setState(state);
+	                return false;
+	            }
+	        }
+	    }, {
 	        key: 'saveChanges',
 	        value: function saveChanges(e) {
 
-	            var url = this.state.environment == 'Production' ? 'https://login.salesforce.com' : this.state.environment == 'Sandbox' ? 'https://test.salesforce.com' : this.state.url;
+	            if (this.validate()) {
+	                var url = this.state.environment == 'Production' ? 'https://login.salesforce.com' : this.state.environment == 'Sandbox' ? 'https://test.salesforce.com' : this.state.url;
 
-	            if (this.state.id == null) {
-	                _store2.default.addAccount(this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
-	            } else {
-	                _store2.default.updateAccount(this.state.id, this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
-	                _store2.default.updateLastAccessed(this.state.id);
+	                if (this.state.id == null) {
+	                    _store2.default.addAccount(this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
+	                } else {
+	                    _store2.default.updateAccount(this.state.id, this.state.name, url, this.state.environment, this.state.username, this.state.password, this.state.token);
+	                    _store2.default.updateLastAccessed(this.state.id);
+	                }
+
+	                this.context.history.pushState('/');
 	            }
-
-	            this.context.history.pushState('/');
 	        }
 	    }, {
 	        key: 'render',
@@ -24742,6 +24776,11 @@
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'slds-grid slds-wrap' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'slds-col slds-size--1-of-1 margin-on-top slds-col--padded slds-form--stacked' },
+	                    _react2.default.createElement(_errorDialog2.default, { message: this.state.error })
+	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'slds-col slds-size--1-of-1 margin-on-top slds-col--padded slds-form--stacked' },
@@ -24887,6 +24926,67 @@
 
 /***/ },
 /* 213 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ErrorDialog = function (_React$Component) {
+	    _inherits(ErrorDialog, _React$Component);
+
+	    function ErrorDialog() {
+	        _classCallCheck(this, ErrorDialog);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ErrorDialog).apply(this, arguments));
+	    }
+
+	    _createClass(ErrorDialog, [{
+	        key: "render",
+	        value: function render() {
+	            if (this.props.message) {
+	                return _react2.default.createElement(
+	                    "div",
+	                    null,
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture", role: "alert" },
+	                        _react2.default.createElement(
+	                            "h2",
+	                            null,
+	                            this.props.message
+	                        )
+	                    )
+	                );
+	            } else {
+	                return _react2.default.createElement("span", null);
+	            }
+	        }
+	    }]);
+
+	    return ErrorDialog;
+	}(_react2.default.Component);
+
+	exports.default = ErrorDialog;
+
+/***/ },
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
