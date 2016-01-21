@@ -152,20 +152,20 @@ class EditAccount extends React.Component {
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="url">URL</label>
                         <div className="slds-form-element__control">
-                            <input className="slds-input" type="text" placeholder="URL" onChange={this.bindState.bind(this, 'url')} value={this.state.url}/>
+                            <input className="slds-input" type="text" placeholder="URL" onChange={this.bindState.bind(this, 'url')} value={this.state.url} autocomplete="off"/>
                         </div>
                     </div> :
                     null }
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="username">Username</label>
                         <div className="slds-form-element__control">
-                            <input className="slds-input" type="text" placeholder="Username" onChange={this.bindState.bind(this, 'username')} value={this.state.username} />
+                            <input className="slds-input" type="text" placeholder="Username" onChange={this.bindState.bind(this, 'username')} value={this.state.username} autocomplete="off"/>
                         </div>
                     </div>
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="password">Password</label>
                         <div className="slds-form-element__control">
-                            <input className="slds-input" type={ this.state.showPassword ? 'text' : 'password' } placeholder="Password" onChange={this.bindState.bind(this, 'password')} value={this.state.password} />
+                            <input className="slds-input" type={ this.state.showPassword ? 'text' : 'password' } placeholder="Password" onChange={this.bindState.bind(this, 'password')} value={this.state.password} autocomplete="off"/>
                         </div>
                     </div>
                     {/*<div className="slds-form-element">
@@ -177,7 +177,7 @@ class EditAccount extends React.Component {
                     <div className="slds-form-element">
                         <label className="slds-form-element__label" for="name">Name</label>
                         <div className="slds-form-element__control">
-                            <input className="slds-input" type="text" placeholder="Name" onChange={this.bindState.bind(this, 'name')} value={this.state.name} />
+                            <input className="slds-input" type="text" placeholder="Name" onChange={this.bindState.bind(this, 'name')} value={this.state.name} autocomplete="off"/>
                         </div>
                     </div>
                     <button className="slds-button slds-button--brand margin-on-top" onClick={this.saveChanges.bind(this)}>Save</button>

@@ -24855,7 +24855,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'URL', onChange: this.bindState.bind(this, 'url'), value: this.state.url })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'URL', onChange: this.bindState.bind(this, 'url'), value: this.state.url, autocomplete: 'off' })
 	                        )
 	                    ) : null,
 	                    _react2.default.createElement(
@@ -24869,7 +24869,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Username', onChange: this.bindState.bind(this, 'username'), value: this.state.username })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Username', onChange: this.bindState.bind(this, 'username'), value: this.state.username, autocomplete: 'off' })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -24883,7 +24883,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { className: 'slds-input', type: this.state.showPassword ? 'text' : 'password', placeholder: 'Password', onChange: this.bindState.bind(this, 'password'), value: this.state.password })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: this.state.showPassword ? 'text' : 'password', placeholder: 'Password', onChange: this.bindState.bind(this, 'password'), value: this.state.password, autocomplete: 'off' })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -24897,7 +24897,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Name', onChange: this.bindState.bind(this, 'name'), value: this.state.name })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Name', onChange: this.bindState.bind(this, 'name'), value: this.state.name, autocomplete: 'off' })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
