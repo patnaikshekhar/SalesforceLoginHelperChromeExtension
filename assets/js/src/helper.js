@@ -20,18 +20,22 @@ export default {
         
         if (incognito) {
             chrome.extension.isAllowedIncognitoAccess(function(isAllowedAccess) {
-                if (!isAllowedAccess) {
-                    alert('To use this feature please allow incognito mode in the following screen.');
-
-                    chrome.tabs.create({
-                        url: 'chrome://extensions/?id=' + chrome.runtime.id
-                    });
+                if (!isAllowedAccess) {                    
+                    return false;
                 } else {
                     _openWindow(url, username, password, incognito, tab);
+                    return true;
                 }
             });
         } else {
             _openWindow(url, username, password, incognito, tab);
+            return true;
         }
+    },
+    
+    gotoExtensionUrl: function() {
+        chrome.tabs.create({
+            url: 'chrome://extensions/?id=' + chrome.runtime.id
+        });
     }
 }

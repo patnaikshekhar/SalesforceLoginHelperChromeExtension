@@ -1,6 +1,6 @@
 # Salesforce Login Helper
 
-A Simple Chrome Extension that makes it easy to store Salesforce Logins. This is especially useful for people who use mutiple orgs and mutiple logins.
+When working with many Salesforce Orgs its very difficult to remember all your credentials. Salesforce Login Helper is a Simple Chrome Extension that makes it easy to store Salesforce Logins. This is especially useful for people who use mutiple orgs and mutiple logins.
 
 ## Installation
 

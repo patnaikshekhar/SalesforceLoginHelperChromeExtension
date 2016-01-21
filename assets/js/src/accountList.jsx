@@ -1,6 +1,7 @@
 import React from 'react';
 import Store from './store';
 import AccountListItem from './accountListItem';
+import ErrorDialog from './errorDialog';
 
 class AccountList extends React.Component {
 
@@ -35,6 +36,11 @@ class AccountList extends React.Component {
         Store.unsubscribe(this.refresh.bind(this));
     }
     
+    error(contents, e) {
+        var state = this.state;
+        state['error'] = contents; 
+    }
+    
 	render() {
         
 		let items = this.state.accounts
@@ -50,17 +56,23 @@ class AccountList extends React.Component {
 				}
 			})
 			.map((acc) => 
-				<AccountListItem name={acc.name} url={acc.url} environment={acc.environment} username={acc.username} password={acc.password} key={acc.id} id={acc.id} /> 
+				<AccountListItem name={acc.name} url={acc.url} environment={acc.environment} username={acc.username} password={acc.password} key={acc.id} id={acc.id} onError={this.error.bind(this)}/> 
 			);
 
 		return (
-			<table className="slds-table slds-table--bordered">
-				<thead className="slds-text-heading--label">
-				</thead>
-				<tbody>
-					{ items }
-				</tbody>
-			</table>
+            <div>
+                <ErrorDialog>
+                    { this.state.error }
+                </ErrorDialog>
+                
+                <table className="slds-table slds-table--bordered">
+                    <thead className="slds-text-heading--label">
+                    </thead>
+                    <tbody>
+                        { items }
+                    </tbody>
+                </table>
+            </div>
 		);
 	}
 }

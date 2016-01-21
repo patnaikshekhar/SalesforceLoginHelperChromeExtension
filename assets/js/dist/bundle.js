@@ -19679,11 +19679,11 @@
 
 	var _listAccounts2 = _interopRequireDefault(_listAccounts);
 
-	var _editAccount = __webpack_require__(212);
+	var _editAccount = __webpack_require__(211);
 
 	var _editAccount2 = _interopRequireDefault(_editAccount);
 
-	var _template = __webpack_require__(214);
+	var _template = __webpack_require__(213);
 
 	var _template2 = _interopRequireDefault(_template);
 
@@ -24185,7 +24185,7 @@
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 
 	var _react = __webpack_require__(1);
@@ -24200,6 +24200,10 @@
 
 	var _accountListItem2 = _interopRequireDefault(_accountListItem);
 
+	var _errorDialog = __webpack_require__(212);
+
+	var _errorDialog2 = _interopRequireDefault(_errorDialog);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24209,81 +24213,96 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var AccountList = function (_React$Component) {
-		_inherits(AccountList, _React$Component);
+	  _inherits(AccountList, _React$Component);
 
-		function AccountList() {
-			_classCallCheck(this, AccountList);
+	  function AccountList() {
+	    _classCallCheck(this, AccountList);
 
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(AccountList).call(this));
-		}
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AccountList).call(this));
+	  }
 
-		_createClass(AccountList, [{
-			key: 'refresh',
-			value: function refresh(action, accounts) {
-				if (this) {
-					if (accounts.length > 0) {
-						this.setState({
-							accounts: accounts
-						});
-					} else {
-						this.context.history.pushState(null, '/add/new');
-					}
-				}
-			}
-		}, {
-			key: 'componentWillMount',
-			value: function componentWillMount() {
+	  _createClass(AccountList, [{
+	    key: 'refresh',
+	    value: function refresh(action, accounts) {
+	      if (this) {
+	        if (accounts.length > 0) {
+	          this.setState({
+	            accounts: accounts
+	          });
+	        } else {
+	          this.context.history.pushState(null, '/add/new');
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
 
-				this.setState({
-					accounts: []
-				});
+	      this.setState({
+	        accounts: []
+	      });
 
-				_store2.default.subscribe(this.refresh.bind(this));
+	      _store2.default.subscribe(this.refresh.bind(this));
 
-				_store2.default.initialize();
-			}
-		}, {
-			key: 'componentWillUnmount',
-			value: function componentWillUnmount() {
-				_store2.default.unsubscribe(this.refresh.bind(this));
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var _this2 = this;
+	      _store2.default.initialize();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      _store2.default.unsubscribe(this.refresh.bind(this));
+	    }
+	  }, {
+	    key: 'error',
+	    value: function error(contents, e) {
+	      var state = this.state;
+	      state['error'] = contents;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
 
-				var items = this.state.accounts.filter(function (acc) {
-					if (_this2.props.filter) {
-						if (acc.name.toUpperCase().indexOf(_this2.props.filter.toUpperCase()) > -1) {
-							return true;
-						} else {
-							return false;
-						}
-					} else {
-						return true;
-					}
-				}).map(function (acc) {
-					return _react2.default.createElement(_accountListItem2.default, { name: acc.name, url: acc.url, environment: acc.environment, username: acc.username, password: acc.password, key: acc.id, id: acc.id });
-				});
+	      var items = this.state.accounts.filter(function (acc) {
+	        if (_this2.props.filter) {
+	          if (acc.name.toUpperCase().indexOf(_this2.props.filter.toUpperCase()) > -1) {
+	            return true;
+	          } else {
+	            return false;
+	          }
+	        } else {
+	          return true;
+	        }
+	      }).map(function (acc) {
+	        return _react2.default.createElement(_accountListItem2.default, { name: acc.name, url: acc.url, environment: acc.environment, username: acc.username, password: acc.password, key: acc.id, id: acc.id, onError: _this2.error.bind(_this2) });
+	      });
 
-				return _react2.default.createElement(
-					'table',
-					{ className: 'slds-table slds-table--bordered' },
-					_react2.default.createElement('thead', { className: 'slds-text-heading--label' }),
-					_react2.default.createElement(
-						'tbody',
-						null,
-						items
-					)
-				);
-			}
-		}]);
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          _errorDialog2.default,
+	          null,
+	          this.state.error
+	        ),
+	        _react2.default.createElement(
+	          'table',
+	          { className: 'slds-table slds-table--bordered' },
+	          _react2.default.createElement('thead', { className: 'slds-text-heading--label' }),
+	          _react2.default.createElement(
+	            'tbody',
+	            null,
+	            items
+	          )
+	        )
+	      );
+	    }
+	  }]);
 
-		return AccountList;
+	  return AccountList;
 	}(_react2.default.Component);
 
 	AccountList.contextTypes = {
-		history: _react2.default.PropTypes.object
+	  history: _react2.default.PropTypes.object
 	};
 
 	exports.default = AccountList;
@@ -24449,7 +24468,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _helper = __webpack_require__(211);
+	var _helper = __webpack_require__(214);
 
 	var _helper2 = _interopRequireDefault(_helper);
 
@@ -24492,7 +24511,30 @@
 	        key: 'openIncognito',
 	        value: function openIncognito() {
 	            _store2.default.updateLastAccessed(this.props.id);
-	            _helper2.default.openWindow(this.props.url, this.props.username, this.props.password, true);
+	            var result = _helper2.default.openWindow(this.props.url, this.props.username, this.props.password, true);
+	            console.log(this.props.onError);
+	            if (!result) {
+	                this.props.onError(_react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        'This extension needs to be enabled in incognito mode in order for this to work'
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Click ',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { onClick: _helper2.default.gotoExtensionUrl, href: '#' },
+	                            'here'
+	                        ),
+	                        ' to do that.'
+	                    )
+	                ));
+	            }
 	        }
 	    }, {
 	        key: 'deleteRecord',
@@ -24576,55 +24618,6 @@
 
 /***/ },
 /* 211 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _openWindow(url, username, password, incognito, tab) {
-	    var secret = "dsaklhkh231231jhlkaasd";
-	    var eUsername = CryptoJS.TripleDES.encrypt(username, secret);
-	    var ePassword = CryptoJS.TripleDES.encrypt(password, secret);
-
-	    if (!tab) {
-	        chrome.windows.create({
-	            url: chrome.runtime.getURL('login.html') + '?a=' + url + '&b=' + ePassword + '&c=' + eUsername,
-	            incognito: incognito
-	        });
-	    } else {
-	        chrome.tabs.create({
-	            url: chrome.runtime.getURL('login.html') + '?a=' + url + '&b=' + ePassword + '&c=' + eUsername
-	        });
-	    }
-	}
-
-	exports.default = {
-	    openWindow: function openWindow(url, username, password) {
-	        var incognito = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
-	        var tab = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
-
-	        if (incognito) {
-	            chrome.extension.isAllowedIncognitoAccess(function (isAllowedAccess) {
-	                if (!isAllowedAccess) {
-	                    alert('To use this feature please allow incognito mode in the following screen.');
-
-	                    chrome.tabs.create({
-	                        url: 'chrome://extensions/?id=' + chrome.runtime.id
-	                    });
-	                } else {
-	                    _openWindow(url, username, password, incognito, tab);
-	                }
-	            });
-	        } else {
-	            _openWindow(url, username, password, incognito, tab);
-	        }
-	    }
-	};
-
-/***/ },
-/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24645,7 +24638,7 @@
 
 	var _reactRouter = __webpack_require__(160);
 
-	var _errorDialog = __webpack_require__(213);
+	var _errorDialog = __webpack_require__(212);
 
 	var _errorDialog2 = _interopRequireDefault(_errorDialog);
 
@@ -24773,6 +24766,11 @@
 	                state.error = null;
 	                return true;
 	            } else {
+	                state.error += _react2.default.createElement(
+	                    'h2',
+	                    null,
+	                    state.error
+	                );
 	                this.setState(state);
 	                return false;
 	            }
@@ -24803,7 +24801,11 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'slds-col slds-size--1-of-1 margin-on-top slds-col--padded slds-form--stacked' },
-	                    _react2.default.createElement(_errorDialog2.default, { message: this.state.error })
+	                    _react2.default.createElement(
+	                        _errorDialog2.default,
+	                        null,
+	                        this.state.error
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'div',
@@ -24935,7 +24937,7 @@
 	exports.default = EditAccount;
 
 /***/ },
-/* 213 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24970,18 +24972,14 @@
 	    _createClass(ErrorDialog, [{
 	        key: "render",
 	        value: function render() {
-	            if (this.props.message) {
+	            if (this.props.children) {
 	                return _react2.default.createElement(
 	                    "div",
 	                    null,
 	                    _react2.default.createElement(
 	                        "div",
 	                        { className: "slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture", role: "alert" },
-	                        _react2.default.createElement(
-	                            "h2",
-	                            null,
-	                            this.props.message
-	                        )
+	                        this.props.children
 	                    )
 	                );
 	            } else {
@@ -24996,7 +24994,7 @@
 	exports.default = ErrorDialog;
 
 /***/ },
-/* 214 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25043,6 +25041,59 @@
 	}(_react2.default.Component);
 
 	exports.default = Template;
+
+/***/ },
+/* 214 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	function _openWindow(url, username, password, incognito, tab) {
+	    var secret = "dsaklhkh231231jhlkaasd";
+	    var eUsername = CryptoJS.TripleDES.encrypt(username, secret);
+	    var ePassword = CryptoJS.TripleDES.encrypt(password, secret);
+
+	    if (!tab) {
+	        chrome.windows.create({
+	            url: chrome.runtime.getURL('login.html') + '?a=' + url + '&b=' + ePassword + '&c=' + eUsername,
+	            incognito: incognito
+	        });
+	    } else {
+	        chrome.tabs.create({
+	            url: chrome.runtime.getURL('login.html') + '?a=' + url + '&b=' + ePassword + '&c=' + eUsername
+	        });
+	    }
+	}
+
+	exports.default = {
+	    openWindow: function openWindow(url, username, password) {
+	        var incognito = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+	        var tab = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
+
+	        if (incognito) {
+	            chrome.extension.isAllowedIncognitoAccess(function (isAllowedAccess) {
+	                if (!isAllowedAccess) {
+	                    return false;
+	                } else {
+	                    _openWindow(url, username, password, incognito, tab);
+	                    return true;
+	                }
+	            });
+	        } else {
+	            _openWindow(url, username, password, incognito, tab);
+	            return true;
+	        }
+	    },
+
+	    gotoExtensionUrl: function gotoExtensionUrl() {
+	        chrome.tabs.create({
+	            url: 'chrome://extensions/?id=' + chrome.runtime.id
+	        });
+	    }
+	};
 
 /***/ }
 /******/ ]);

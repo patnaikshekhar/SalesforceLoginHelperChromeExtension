@@ -107,6 +107,7 @@ class EditAccount extends React.Component {
             state.error = null;
             return true;    
         } else {
+            state.error += <h2>{state.error}</h2>;
             this.setState(state);
             return false;
         }
@@ -133,7 +134,9 @@ class EditAccount extends React.Component {
         return (
             <div className="slds-grid slds-wrap">
                 <div className="slds-col slds-size--1-of-1 margin-on-top slds-col--padded slds-form--stacked">
-                    <ErrorDialog message={this.state.error} />
+                    <ErrorDialog>
+                        {this.state.error}
+                    </ErrorDialog>
                 </div>
 		  		<div className="slds-col slds-size--1-of-1 margin-on-top slds-col--padded slds-form--stacked">
                     <div className="slds-form-element">
