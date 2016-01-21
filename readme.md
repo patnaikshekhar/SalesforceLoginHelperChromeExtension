@@ -18,3 +18,6 @@ The extension can be installed from the chrome app store
 * Written using Javascript and React. 
 
 This is completely free and open source. Issues and Pull Requests are most welcome.
+
+![Screenshot](http://patnaikshekhar.github.io/SalesforceLoginHelperChromeExtension/screenshots/ScreenShot1.png)
+![Screenshot](http://patnaikshekhar.github.io/SalesforceLoginHelperChromeExtension/screenshots/ScreenShot2.png)
