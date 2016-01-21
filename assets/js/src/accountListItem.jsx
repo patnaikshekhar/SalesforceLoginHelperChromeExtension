@@ -38,9 +38,20 @@ export default class AccountListItem extends React.Component {
 			<tr>
 				<td className="slds-lookup__item">
                     <a id="s01" href="#" role="option" onClick={ this.openTab.bind(this) }>
-                        <svg aria-hidden="true" className="slds-icon slds-icon-standard-account slds-icon--small">
+                        {this.props.environment == 'Production' ? 
+                        <svg aria-hidden="true" className="slds-icon slds-icon-standard-article slds-icon--small">
                             <use xlinkHref="/assets/icons/standard-sprite/svg/symbols.svg#account"></use>
-                        </svg><span>{this.props.name}</span>&nbsp;
+                        </svg>
+                        :
+                        (this.props.environment == 'Sandbox' ?
+                        <svg aria-hidden="true" className="slds-icon slds-icon-standard-feed slds-icon--small">
+                            <use xlinkHref="/assets/icons/standard-sprite/svg/symbols.svg#insights"></use>
+                        </svg> : 
+                        <svg aria-hidden="true" className="slds-icon slds-icon-standard-event slds-icon--small">
+                            <use xlinkHref="/assets/icons/standard-sprite/svg/symbols.svg#custom"></use>
+                        </svg>
+                        )
+                        }<span>{this.props.name}</span>&nbsp;
                     </a>
 			    </td>
 			    <td>

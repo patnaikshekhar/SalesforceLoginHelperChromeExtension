@@ -107,7 +107,7 @@ class EditAccount extends React.Component {
             state.error = null;
             return true;    
         } else {
-            state.error += <h2>{state.error}</h2>;
+            state.error = <h2>{state.error}</h2>;
             this.setState(state);
             return false;
         }

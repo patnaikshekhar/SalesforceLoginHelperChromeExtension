@@ -19679,11 +19679,11 @@
 
 	var _listAccounts2 = _interopRequireDefault(_listAccounts);
 
-	var _editAccount = __webpack_require__(211);
+	var _editAccount = __webpack_require__(213);
 
 	var _editAccount2 = _interopRequireDefault(_editAccount);
 
-	var _template = __webpack_require__(213);
+	var _template = __webpack_require__(214);
 
 	var _template2 = _interopRequireDefault(_template);
 
@@ -24156,7 +24156,16 @@
 									_react2.default.createElement(
 										'button',
 										{ className: 'slds-button slds-button--brand' },
-										'Add Account'
+										_react2.default.createElement(
+											'span',
+											null,
+											_react2.default.createElement(
+												'svg',
+												{ 'aria-hidden': 'true', className: 'slds-button__icon--stateful slds-button__icon--left' },
+												_react2.default.createElement('use', { xlinkHref: '/assets/icons/utility-sprite/svg/symbols.svg#add' })
+											),
+											'Add Org'
+										)
 									)
 								)
 							)
@@ -24468,7 +24477,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _helper = __webpack_require__(214);
+	var _helper = __webpack_require__(211);
 
 	var _helper2 = _interopRequireDefault(_helper);
 
@@ -24553,10 +24562,18 @@
 	                    _react2.default.createElement(
 	                        'a',
 	                        { id: 's01', href: '#', role: 'option', onClick: this.openTab.bind(this) },
-	                        _react2.default.createElement(
+	                        this.props.environment == 'Production' ? _react2.default.createElement(
 	                            'svg',
-	                            { 'aria-hidden': 'true', className: 'slds-icon slds-icon-standard-account slds-icon--small' },
+	                            { 'aria-hidden': 'true', className: 'slds-icon slds-icon-standard-article slds-icon--small' },
 	                            _react2.default.createElement('use', { xlinkHref: '/assets/icons/standard-sprite/svg/symbols.svg#account' })
+	                        ) : this.props.environment == 'Sandbox' ? _react2.default.createElement(
+	                            'svg',
+	                            { 'aria-hidden': 'true', className: 'slds-icon slds-icon-standard-feed slds-icon--small' },
+	                            _react2.default.createElement('use', { xlinkHref: '/assets/icons/standard-sprite/svg/symbols.svg#insights' })
+	                        ) : _react2.default.createElement(
+	                            'svg',
+	                            { 'aria-hidden': 'true', className: 'slds-icon slds-icon-standard-event slds-icon--small' },
+	                            _react2.default.createElement('use', { xlinkHref: '/assets/icons/standard-sprite/svg/symbols.svg#custom' })
 	                        ),
 	                        _react2.default.createElement(
 	                            'span',
@@ -24618,6 +24635,116 @@
 
 /***/ },
 /* 211 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	function _openWindow(url, username, password, incognito, tab) {
+	    var secret = "dsaklhkh231231jhlkaasd";
+	    var eUsername = CryptoJS.TripleDES.encrypt(username, secret);
+	    var ePassword = CryptoJS.TripleDES.encrypt(password, secret);
+
+	    if (!tab) {
+	        chrome.windows.create({
+	            url: chrome.runtime.getURL('login.html') + '?a=' + url + '&b=' + ePassword + '&c=' + eUsername,
+	            incognito: incognito
+	        });
+	    } else {
+	        chrome.tabs.create({
+	            url: chrome.runtime.getURL('login.html') + '?a=' + url + '&b=' + ePassword + '&c=' + eUsername
+	        });
+	    }
+	}
+
+	exports.default = {
+	    openWindow: function openWindow(url, username, password) {
+	        var incognito = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+	        var tab = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
+
+	        if (incognito) {
+	            chrome.extension.isAllowedIncognitoAccess(function (isAllowedAccess) {
+	                if (!isAllowedAccess) {
+	                    return false;
+	                } else {
+	                    _openWindow(url, username, password, incognito, tab);
+	                    return true;
+	                }
+	            });
+	        } else {
+	            _openWindow(url, username, password, incognito, tab);
+	            return true;
+	        }
+	    },
+
+	    gotoExtensionUrl: function gotoExtensionUrl() {
+	        chrome.tabs.create({
+	            url: 'chrome://extensions/?id=' + chrome.runtime.id
+	        });
+	    }
+	};
+
+/***/ },
+/* 212 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ErrorDialog = function (_React$Component) {
+	    _inherits(ErrorDialog, _React$Component);
+
+	    function ErrorDialog() {
+	        _classCallCheck(this, ErrorDialog);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ErrorDialog).apply(this, arguments));
+	    }
+
+	    _createClass(ErrorDialog, [{
+	        key: "render",
+	        value: function render() {
+	            if (this.props.children) {
+	                return _react2.default.createElement(
+	                    "div",
+	                    null,
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture", role: "alert" },
+	                        this.props.children
+	                    )
+	                );
+	            } else {
+	                return _react2.default.createElement("span", null);
+	            }
+	        }
+	    }]);
+
+	    return ErrorDialog;
+	}(_react2.default.Component);
+
+	exports.default = ErrorDialog;
+
+/***/ },
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24766,7 +24893,7 @@
 	                state.error = null;
 	                return true;
 	            } else {
-	                state.error += _react2.default.createElement(
+	                state.error = _react2.default.createElement(
 	                    'h2',
 	                    null,
 	                    state.error
@@ -24937,64 +25064,7 @@
 	exports.default = EditAccount;
 
 /***/ },
-/* 212 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ErrorDialog = function (_React$Component) {
-	    _inherits(ErrorDialog, _React$Component);
-
-	    function ErrorDialog() {
-	        _classCallCheck(this, ErrorDialog);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ErrorDialog).apply(this, arguments));
-	    }
-
-	    _createClass(ErrorDialog, [{
-	        key: "render",
-	        value: function render() {
-	            if (this.props.children) {
-	                return _react2.default.createElement(
-	                    "div",
-	                    null,
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture", role: "alert" },
-	                        this.props.children
-	                    )
-	                );
-	            } else {
-	                return _react2.default.createElement("span", null);
-	            }
-	        }
-	    }]);
-
-	    return ErrorDialog;
-	}(_react2.default.Component);
-
-	exports.default = ErrorDialog;
-
-/***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25041,59 +25111,6 @@
 	}(_react2.default.Component);
 
 	exports.default = Template;
-
-/***/ },
-/* 214 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _openWindow(url, username, password, incognito, tab) {
-	    var secret = "dsaklhkh231231jhlkaasd";
-	    var eUsername = CryptoJS.TripleDES.encrypt(username, secret);
-	    var ePassword = CryptoJS.TripleDES.encrypt(password, secret);
-
-	    if (!tab) {
-	        chrome.windows.create({
-	            url: chrome.runtime.getURL('login.html') + '?a=' + url + '&b=' + ePassword + '&c=' + eUsername,
-	            incognito: incognito
-	        });
-	    } else {
-	        chrome.tabs.create({
-	            url: chrome.runtime.getURL('login.html') + '?a=' + url + '&b=' + ePassword + '&c=' + eUsername
-	        });
-	    }
-	}
-
-	exports.default = {
-	    openWindow: function openWindow(url, username, password) {
-	        var incognito = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
-	        var tab = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
-
-	        if (incognito) {
-	            chrome.extension.isAllowedIncognitoAccess(function (isAllowedAccess) {
-	                if (!isAllowedAccess) {
-	                    return false;
-	                } else {
-	                    _openWindow(url, username, password, incognito, tab);
-	                    return true;
-	                }
-	            });
-	        } else {
-	            _openWindow(url, username, password, incognito, tab);
-	            return true;
-	        }
-	    },
-
-	    gotoExtensionUrl: function gotoExtensionUrl() {
-	        chrome.tabs.create({
-	            url: 'chrome://extensions/?id=' + chrome.runtime.id
-	        });
-	    }
-	};
 
 /***/ }
 /******/ ]);
