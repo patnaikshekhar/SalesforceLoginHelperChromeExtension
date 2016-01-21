@@ -46,6 +46,30 @@ class EditAccount extends React.Component {
     bindState(stateVar, e) {
         let newState = {};
         newState[stateVar] = e.target.value;
+        
+        // If the name is blank and the username is updated then update the name logically 
+        if (stateVar == 'username') {
+            if (newState.username.indexOf('@') > -1) {
+                const parts = newState.username.split('@');
+                if (parts.length > 1) {
+                    var lastPart = parts[1];
+                    if (lastPart.indexOf('.') > 0) {
+                        newState.name = 
+                            lastPart.split('.')
+                            .filter(x => x != 'com')
+                            .map(s => s.charAt(0).toUpperCase() + s.slice(1))
+                            .join(' ');
+                    } else {
+                        if (lastPart.length > 1) {
+                            newState.name = lastPart.charAt(0).toUpperCase() + lastPart.slice(1);    
+                        } else {
+                            newState.name = lastPart;
+                        }
+                    }
+                } 
+            }
+        }
+        
         this.setState(Object.assign(this.state, newState));
     }
     

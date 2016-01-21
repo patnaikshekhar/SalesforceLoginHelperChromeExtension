@@ -24254,7 +24254,7 @@
 
 				var items = this.state.accounts.filter(function (acc) {
 					if (_this2.props.filter) {
-						if (acc.name.indexOf(_this2.props.filter) > -1) {
+						if (acc.name.toUpperCase().indexOf(_this2.props.filter.toUpperCase()) > -1) {
 							return true;
 						} else {
 							return false;
@@ -24708,6 +24708,30 @@
 	        value: function bindState(stateVar, e) {
 	            var newState = {};
 	            newState[stateVar] = e.target.value;
+
+	            // If the name is blank and the username is updated then update the name logically
+	            if (stateVar == 'username') {
+	                if (newState.username.indexOf('@') > -1) {
+	                    var parts = newState.username.split('@');
+	                    if (parts.length > 1) {
+	                        var lastPart = parts[1];
+	                        if (lastPart.indexOf('.') > 0) {
+	                            newState.name = lastPart.split('.').filter(function (x) {
+	                                return x != 'com';
+	                            }).map(function (s) {
+	                                return s.charAt(0).toUpperCase() + s.slice(1);
+	                            }).join(' ');
+	                        } else {
+	                            if (lastPart.length > 1) {
+	                                newState.name = lastPart.charAt(0).toUpperCase() + lastPart.slice(1);
+	                            } else {
+	                                newState.name = lastPart;
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+
 	            this.setState(Object.assign(this.state, newState));
 	        }
 

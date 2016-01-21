@@ -40,7 +40,7 @@ class AccountList extends React.Component {
 		let items = this.state.accounts
 			.filter((acc) => {
 				if (this.props.filter) {
-					if (acc.name.indexOf(this.props.filter) > -1) {
+					if (acc.name.toUpperCase().indexOf(this.props.filter.toUpperCase()) > -1) {
 						return true;
 					} else {
 						return false;
