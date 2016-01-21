@@ -13,5 +13,5 @@ body {
 
 .accountlist {
     max-height: 550px;
-    overflow: scroll;
+    overflow-y: scroll;
 }

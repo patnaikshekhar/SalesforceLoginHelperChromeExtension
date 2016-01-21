@@ -1,1 +1,4 @@
 node_modules
+*.zip
+app_store_dist
+.DS_Store
