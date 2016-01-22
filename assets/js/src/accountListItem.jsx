@@ -18,7 +18,7 @@ export default class AccountListItem extends React.Component {
     openIncognito() {
         Store.updateLastAccessed(this.props.id);
         const result = Helper.openWindow(this.props.url, this.props.username, this.props.password, true);
-        console.log(this.props.onError);
+        
         if (!result) {
             this.props.onError(
                 <div>
