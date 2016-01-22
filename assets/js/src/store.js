@@ -69,13 +69,19 @@ export default {
     
     updateAccount(id, name, url, environment, username, password, token) {
         
-        let account = this.accounts.filter(account => id == account.id)[0];
-        account.name = name;
-        account.url = url;
-        account.environment = environment;
-        account.username = username;
-        account.password = password;
-        account.token = token;
+        this.accounts = this.accounts.map(account => {
+            if (id == account.id) {
+                account.name = name;
+                account.url = url;
+                account.environment = environment;
+                account.username = username;
+                account.password = password;
+                account.token = token;
+            }
+            
+            return account;
+        });
+        
         
 		this.dispatch(ACTION_CHANGED, this.accounts);
 		return true;

@@ -4,8 +4,7 @@ When working with many Salesforce Orgs its very difficult to remember all your c
 
 ## Installation
 
-The extension can be installed from the chrome app store
-(TODO Chrom App Store URL)
+The extension can be installed from the [chrome app store](https://chrome.google.com/webstore/detail/salesforce-login-helper/lphjfeeaniomnoomcplfomgonemdmplf)
 
 
 ## Features
@@ -18,5 +17,13 @@ The extension can be installed from the chrome app store
 * Written using Javascript and React. 
 
 This is completely free and open source. Issues and Pull Requests are most welcome.
+
+
+## Tutorial
+
+A tutorial on how to use the extension is available on [youtube](https://youtu.be/0XVmU9s29zM)
+
+
+## Screenshots
 
 ![Screenshot](http://patnaikshekhar.github.io/SalesforceLoginHelperChromeExtension/screenshots/SampleAnimationImage.gif)
