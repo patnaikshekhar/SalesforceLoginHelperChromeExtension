@@ -29,7 +29,7 @@ class ListAccounts extends React.Component {
                                 <svg aria-hidden="true" className="slds-input__icon">
                                     <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
                                 </svg>
-                                <input placeholder="Search.." onChange={this.filterResults.bind(this)} className="slds-input" type="text" />
+                                <input placeholder="Search.." onChange={this.filterResults.bind(this)} className="slds-input search-input" type="text" />
                             </div>
                         </div>
                         <div className="slds-col slds-size--1-of-6 slds-col--padded">

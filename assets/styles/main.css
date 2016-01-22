@@ -15,3 +15,7 @@ body {
     max-height: 550px;
     overflow-y: scroll;
 }
+
+.search-input {
+    padding-left: 10px;
+}
