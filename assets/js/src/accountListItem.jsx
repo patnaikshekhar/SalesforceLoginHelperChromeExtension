@@ -7,26 +7,28 @@ export default class AccountListItem extends React.Component {
     
     openTab() {
         Store.updateLastAccessed(this.props.id);
-        Helper.openWindow(this.props.url, this.props.username, this.props.password, false, true);   
+        Helper.openWindow(() => _, this.props.url, this.props.username, this.props.password, false, true);   
     }
     
     openWindow() {
         Store.updateLastAccessed(this.props.id);
-        Helper.openWindow(this.props.url, this.props.username, this.props.password);   
+        Helper.openWindow(() => _, this.props.url, this.props.username, this.props.password);   
     }
     
     openIncognito() {
-        Store.updateLastAccessed(this.props.id);
-        const result = Helper.openWindow(this.props.url, this.props.username, this.props.password, true);
         
-        if (!result) {
-            this.props.onError(
-                <div>
-                    <h2>This extension needs to be enabled in incognito mode in order for this to work</h2>
-                    <p>Click <a onClick={ Helper.gotoExtensionUrl } href="#">here</a> to do that.</p>
-                </div>
-            );
-        }   
+        Store.updateLastAccessed(this.props.id);
+        
+        Helper.openWindow((result) => {   
+            if (!result) {
+                this.props.onError(
+                    <div>
+                        <h2>This extension needs to be enabled in incognito mode in order for this to work</h2>
+                        <p>Click <a onClick={ Helper.gotoExtensionUrl } href="#">here</a> to do that.</p>
+                    </div>
+                );
+            }
+        }, this.props.url, this.props.username, this.props.password, true);   
     }
     
     deleteRecord() {

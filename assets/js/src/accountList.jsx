@@ -39,6 +39,7 @@ class AccountList extends React.Component {
     error(contents, e) {
         var state = this.state;
         state['error'] = contents; 
+        this.setState(state);
     }
     
 	render() {

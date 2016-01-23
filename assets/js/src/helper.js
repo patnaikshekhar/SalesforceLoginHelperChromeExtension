@@ -1,4 +1,5 @@
 function _openWindow(url, username, password, incognito, tab) {
+    
     var secret = "dsaklhkh231231jhlkaasd";
     var eUsername = CryptoJS.TripleDES.encrypt(username, secret);
     var ePassword = CryptoJS.TripleDES.encrypt(password, secret);
@@ -16,20 +17,20 @@ function _openWindow(url, username, password, incognito, tab) {
 }
 
 export default {
-    openWindow: function(url, username, password, incognito = false, tab = false) {
-        
+    openWindow: function(callback, url, username, password, incognito = false, tab = false) {
+
         if (incognito) {
             chrome.extension.isAllowedIncognitoAccess(function(isAllowedAccess) {
-                if (!isAllowedAccess) {                    
-                    return false;
+                if (!isAllowedAccess) {                  
+                    callback(false);
                 } else {
                     _openWindow(url, username, password, incognito, tab);
-                    return true;
+                    callback(true);
                 }
             });
         } else {
             _openWindow(url, username, password, incognito, tab);
-            return true;
+            callback(true);
         }
     },
     

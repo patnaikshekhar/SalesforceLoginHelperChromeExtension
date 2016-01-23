@@ -24144,7 +24144,7 @@
 										{ 'aria-hidden': 'true', className: 'slds-input__icon' },
 										_react2.default.createElement('use', { xlinkHref: '/assets/icons/utility-sprite/svg/symbols.svg#search' })
 									),
-									_react2.default.createElement('input', { placeholder: 'Search..', onChange: this.filterResults.bind(this), className: 'slds-input', type: 'text' })
+									_react2.default.createElement('input', { placeholder: 'Search..', onChange: this.filterResults.bind(this), className: 'slds-input search-input', type: 'text' })
 								)
 							),
 							_react2.default.createElement(
@@ -24265,6 +24265,7 @@
 	    value: function error(contents, e) {
 	      var state = this.state;
 	      state['error'] = contents;
+	      this.setState(state);
 	    }
 	  }, {
 	    key: 'render',
@@ -24398,15 +24399,18 @@
 	    },
 	    updateAccount: function updateAccount(id, name, url, environment, username, password, token) {
 
-	        var account = this.accounts.filter(function (account) {
-	            return id == account.id;
-	        })[0];
-	        account.name = name;
-	        account.url = url;
-	        account.environment = environment;
-	        account.username = username;
-	        account.password = password;
-	        account.token = token;
+	        this.accounts = this.accounts.map(function (account) {
+	            if (id == account.id) {
+	                account.name = name;
+	                account.url = url;
+	                account.environment = environment;
+	                account.username = username;
+	                account.password = password;
+	                account.token = token;
+	            }
+
+	            return account;
+	        });
 
 	        this.dispatch(ACTION_CHANGED, this.accounts);
 	        return true;
@@ -24508,42 +24512,49 @@
 	        key: 'openTab',
 	        value: function openTab() {
 	            _store2.default.updateLastAccessed(this.props.id);
-	            _helper2.default.openWindow(this.props.url, this.props.username, this.props.password, false, true);
+	            _helper2.default.openWindow(function () {
+	                return _;
+	            }, this.props.url, this.props.username, this.props.password, false, true);
 	        }
 	    }, {
 	        key: 'openWindow',
 	        value: function openWindow() {
 	            _store2.default.updateLastAccessed(this.props.id);
-	            _helper2.default.openWindow(this.props.url, this.props.username, this.props.password);
+	            _helper2.default.openWindow(function () {
+	                return _;
+	            }, this.props.url, this.props.username, this.props.password);
 	        }
 	    }, {
 	        key: 'openIncognito',
 	        value: function openIncognito() {
+	            var _this2 = this;
+
 	            _store2.default.updateLastAccessed(this.props.id);
-	            var result = _helper2.default.openWindow(this.props.url, this.props.username, this.props.password, true);
-	            console.log(this.props.onError);
-	            if (!result) {
-	                this.props.onError(_react2.default.createElement(
-	                    'div',
-	                    null,
-	                    _react2.default.createElement(
-	                        'h2',
+
+	            _helper2.default.openWindow(function (result) {
+	                if (!result) {
+	                    _this2.props.onError(_react2.default.createElement(
+	                        'div',
 	                        null,
-	                        'This extension needs to be enabled in incognito mode in order for this to work'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        'Click ',
 	                        _react2.default.createElement(
-	                            'a',
-	                            { onClick: _helper2.default.gotoExtensionUrl, href: '#' },
-	                            'here'
+	                            'h2',
+	                            null,
+	                            'This extension needs to be enabled in incognito mode in order for this to work'
 	                        ),
-	                        ' to do that.'
-	                    )
-	                ));
-	            }
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Click ',
+	                            _react2.default.createElement(
+	                                'a',
+	                                { onClick: _helper2.default.gotoExtensionUrl, href: '#' },
+	                                'here'
+	                            ),
+	                            ' to do that.'
+	                        )
+	                    ));
+	                }
+	            }, this.props.url, this.props.username, this.props.password, true);
 	        }
 	    }, {
 	        key: 'deleteRecord',
@@ -24643,6 +24654,7 @@
 	    value: true
 	});
 	function _openWindow(url, username, password, incognito, tab) {
+
 	    var secret = "dsaklhkh231231jhlkaasd";
 	    var eUsername = CryptoJS.TripleDES.encrypt(username, secret);
 	    var ePassword = CryptoJS.TripleDES.encrypt(password, secret);
@@ -24660,22 +24672,22 @@
 	}
 
 	exports.default = {
-	    openWindow: function openWindow(url, username, password) {
-	        var incognito = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
-	        var tab = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
+	    openWindow: function openWindow(callback, url, username, password) {
+	        var incognito = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
+	        var tab = arguments.length <= 5 || arguments[5] === undefined ? false : arguments[5];
 
 	        if (incognito) {
 	            chrome.extension.isAllowedIncognitoAccess(function (isAllowedAccess) {
 	                if (!isAllowedAccess) {
-	                    return false;
+	                    callback(false);
 	                } else {
 	                    _openWindow(url, username, password, incognito, tab);
-	                    return true;
+	                    callback(true);
 	                }
 	            });
 	        } else {
 	            _openWindow(url, username, password, incognito, tab);
-	            return true;
+	            callback(true);
 	        }
 	    },
 
