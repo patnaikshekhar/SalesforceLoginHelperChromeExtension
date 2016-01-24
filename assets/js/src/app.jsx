@@ -4,6 +4,7 @@ import ListAccounts from './listAccounts';
 import EditAccount from './editAccount';
 import Template from './template';
 import Store from './store';
+import SaveAccounts from './saveAccounts';
 
 export default class App extends React.Component {
     
@@ -13,6 +14,7 @@ export default class App extends React.Component {
                 <Route path="/" component={Template}>
                     <IndexRoute component={ListAccounts} />
                     <Route path="add/:id" component={EditAccount} />
+                    <Route path="save" component={SaveAccounts} />
                 </Route>
             </Router>  
        );

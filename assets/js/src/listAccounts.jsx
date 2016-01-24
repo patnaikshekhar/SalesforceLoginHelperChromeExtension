@@ -32,13 +32,20 @@ class ListAccounts extends React.Component {
                                 <input placeholder="Search.." onChange={this.filterResults.bind(this)} className="slds-input search-input" type="text" />
                             </div>
                         </div>
-                        <div className="slds-col slds-size--1-of-6 slds-col--padded">
+                        <div className="slds-col slds-size--2-of-6 slds-col--padded">
                            <Link to="/add/new">
 		    			       <button className="slds-button slds-button--brand">
                                 <span>
                                     <svg aria-hidden="true" className="slds-button__icon--stateful slds-button__icon--left">
                                     <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
                                 </svg>Add Org</span>
+                               </button>
+                           </Link>
+                           <Link to="/save">
+                               <button className="slds-button slds-button--brand">
+                                    <svg aria-hidden="true" className="slds-button__icon--stateful slds-button__icon--left">
+                                        <use xlinkHref="/assets/icons/action-sprite/svg/symbols.svg#share_file"></use>
+                                    </svg>
                                </button>
                            </Link>
 		    		    </div>
