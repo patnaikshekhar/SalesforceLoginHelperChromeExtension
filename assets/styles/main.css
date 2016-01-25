@@ -19,3 +19,13 @@ body {
 .search-input {
     padding-left: 10px;
 }
+
+.export-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.background-success {
+    background-color: rgb(4, 132, 75) !important;
+    border-color:    rgb(4, 132, 75) !important;
+}

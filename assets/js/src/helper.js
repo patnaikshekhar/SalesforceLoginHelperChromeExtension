@@ -38,5 +38,14 @@ export default {
         chrome.tabs.create({
             url: 'chrome://extensions/?id=' + chrome.runtime.id
         });
+    },
+    
+    download: function(accounts) {
+        console.log(accounts);
+        chrome.downloads.download({ 
+            url: `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(accounts))}`, 
+            filename: 'export.json',
+            saveAs: true
+        });    
     }
 }

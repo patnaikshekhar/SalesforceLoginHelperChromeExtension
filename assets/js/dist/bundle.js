@@ -24140,7 +24140,7 @@
 	            { className: 'slds-grid' },
 	            _react2.default.createElement(
 	              'div',
-	              { className: 'slds-col slds-size--4-of-6' },
+	              { className: 'slds-col slds-size--4-of-6 search-input' },
 	              _react2.default.createElement(
 	                'div',
 	                { className: 'slds-form-element__control slds-input-has-icon slds-input-has-icon--right' },
@@ -24149,7 +24149,7 @@
 	                  { 'aria-hidden': 'true', className: 'slds-input__icon' },
 	                  _react2.default.createElement('use', { xlinkHref: '/assets/icons/utility-sprite/svg/symbols.svg#search' })
 	                ),
-	                _react2.default.createElement('input', { placeholder: 'Search..', onChange: this.filterResults.bind(this), className: 'slds-input search-input', type: 'text' })
+	                _react2.default.createElement('input', { placeholder: 'Search..', onChange: this.filterResults.bind(this), className: 'slds-input', type: 'text' })
 	              )
 	            ),
 	            _react2.default.createElement(
@@ -24178,10 +24178,10 @@
 	                { to: '/save' },
 	                _react2.default.createElement(
 	                  'button',
-	                  { className: 'slds-button slds-button--brand' },
+	                  { className: 'slds-button slds-button--brand slight-margin-left background-success' },
 	                  _react2.default.createElement(
 	                    'svg',
-	                    { 'aria-hidden': 'true', className: 'slds-button__icon--stateful slds-button__icon--left' },
+	                    { 'aria-hidden': 'true', className: 'slds-button__icon--stateful slds-button__icon--left export-icon' },
 	                    _react2.default.createElement('use', { xlinkHref: '/assets/icons/action-sprite/svg/symbols.svg#share_file' })
 	                  )
 	                )
@@ -24713,6 +24713,15 @@
 	        chrome.tabs.create({
 	            url: 'chrome://extensions/?id=' + chrome.runtime.id
 	        });
+	    },
+
+	    download: function download(accounts) {
+	        console.log(accounts);
+	        chrome.downloads.download({
+	            url: 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(accounts)),
+	            filename: 'export.json',
+	            saveAs: true
+	        });
 	    }
 	};
 
@@ -25162,6 +25171,10 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
+	var _helper = __webpack_require__(211);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25184,9 +25197,18 @@
 	        value: function refresh(action, accounts) {
 	            if (this) {
 	                if (accounts.length > 0) {
-	                    this.setState({
-	                        accounts: accounts
+	                    var state = this.state;
+
+	                    state.accounts = accounts.map(function (acc) {
+	                        return {
+	                            id: acc.id,
+	                            name: acc.name,
+	                            selected: true,
+	                            account: acc
+	                        };
 	                    });
+
+	                    this.setState(state);
 	                }
 	            }
 	        }
@@ -25195,33 +25217,93 @@
 	        value: function componentWillMount() {
 
 	            this.setState({
-	                accounts: []
+	                accounts: [],
+	                secret: null
 	            });
 
 	            _store2.default.subscribe(this.refresh.bind(this));
 
 	            _store2.default.initialize();
 	        }
+
+	        // Sets the state when the checkbox is clicked
+
+	    }, {
+	        key: 'setSelected',
+	        value: function setSelected(selectedAccount, e) {
+	            var state = this.state.accounts.map(function (acc) {
+
+	                if (selectedAccount.id == acc.id) {
+	                    if (acc.selected) {
+	                        acc.selected = false;
+	                    } else {
+	                        acc.selected = true;
+	                    }
+	                }
+
+	                return acc;
+	            });
+
+	            this.setState(state);
+	        }
+
+	        // Set Secret
+
+	    }, {
+	        key: 'setSecret',
+	        value: function setSecret(e) {
+	            var secret = e.target.value;
+	            if (secret == '') {
+	                secret = null;
+	            }
+
+	            var state = this.state;
+	            state.secret = secret;
+	            this.setState(state);
+	        }
+
+	        // Exports the selected account to disk
+
+	    }, {
+	        key: 'exportAccounts',
+	        value: function exportAccounts() {
+	            var secret = this.state.secret;
+
+	            _helper2.default.download(this.state.accounts.filter(function (acc) {
+	                return acc.selected;
+	            }).map(function (acc) {
+	                if (secret) {
+	                    acc.account.username = CryptoJS.TripleDES.encrypt(acc.account.username, secret).toString();
+	                    acc.account.password = CryptoJS.TripleDES.encrypt(acc.account.password, secret).toString();
+	                }
+
+	                return acc.account;
+	            }));
+
+	            this.context.history.pushState('/');
+	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+
 	            var rows = this.state.accounts.map(function (acc) {
 	                return _react2.default.createElement(
 	                    'tr',
-	                    { 'class': 'slds-hint-parent' },
+	                    { className: 'slds-hint-parent', key: acc.id },
 	                    _react2.default.createElement(
-	                        'label',
-	                        { 'class': 'slds-checkbox', 'for': 'select-row1' },
-	                        _react2.default.createElement('input', { name: 'select-row1', type: 'checkbox', id: 'select-row1' }),
+	                        'td',
+	                        null,
 	                        _react2.default.createElement(
-	                            'td',
-	                            { 'data-label': 'account' },
-	                            _react2.default.createElement(
-	                                'a',
-	                                { href: '#', 'class': 'slds-truncate' },
-	                                acc.name
-	                            )
+	                            'label',
+	                            { 'for': 'select-row1' },
+	                            _react2.default.createElement('input', { name: 'select-row1', type: 'checkbox', id: 'select-row1', checked: acc.selected, onChange: _this2.setSelected.bind(_this2, acc) })
 	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        acc.name
 	                    )
 	                );
 	            });
@@ -25229,6 +25311,71 @@
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'slds-grid slds-wrap' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'slds-col slds-size--1-of-1 margin-on-top slds-col--padded' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'slds-card' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'slds-card__header slds-grid' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'slds-media slds-media--center slds-has-flexi-truncate' },
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'slds-media__figure' },
+	                                    _react2.default.createElement(
+	                                        'svg',
+	                                        { 'aria-hidden': 'true', className: 'slds-icon slds-icon-standard-contact slds-icon--small' },
+	                                        _react2.default.createElement('use', { xlinkHref: '/assets/icons/standard-sprite/svg/symbols.svg#contact' })
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'slds-media__body' },
+	                                    _react2.default.createElement(
+	                                        'h2',
+	                                        { className: 'slds-text-heading--small slds-truncate' },
+	                                        'Export'
+	                                    )
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'slds-card__body' },
+	                            _react2.default.createElement(
+	                                'table',
+	                                { className: 'slds-table slds-table--bordered' },
+	                                _react2.default.createElement(
+	                                    'thead',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'tr',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'th',
+	                                            null,
+	                                            'Selected'
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            'th',
+	                                            null,
+	                                            'Name'
+	                                        )
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'tbody',
+	                                    null,
+	                                    rows
+	                                )
+	                            )
+	                        )
+	                    )
+	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'slds-col slds-size--1-of-1 margin-on-top slds-col--padded' },
@@ -25246,31 +25393,22 @@
 	                            _react2.default.createElement(
 	                                'div',
 	                                { className: 'slds-form-element__control' },
-	                                _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Encryption Key' })
+	                                _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Optional', value: this.state.secret, onChange: this.setSecret.bind(this) })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: this.state.exportURL, download: 'export.json' },
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'slds-button slds-button--brand', type: 'button', onClick: this.exportAccounts.bind(this) },
+	                                'Export'
 	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            'button',
 	                            { className: 'slds-button slds-button--brand', type: 'button' },
-	                            'Export'
-	                        ),
-	                        _react2.default.createElement(
-	                            'button',
-	                            { className: 'slds-button slds-button--brand', type: 'button' },
 	                            'Import'
-	                        )
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'slds-col slds-size--1-of-1 margin-on-top slds-col--padded' },
-	                    _react2.default.createElement(
-	                        'table',
-	                        { className: 'slds-table slds-table--bordered' },
-	                        _react2.default.createElement(
-	                            'tbody',
-	                            null,
-	                            rows
 	                        )
 	                    )
 	                )
@@ -25282,6 +25420,10 @@
 	}(_react2.default.Component);
 
 	exports.default = SaveAccounts;
+
+	SaveAccounts.contextTypes = {
+	    history: _react2.default.PropTypes.object
+	};
 
 /***/ }
 /******/ ]);

@@ -24,12 +24,12 @@ class ListAccounts extends React.Component {
 			<div className="slds-grid slds-wrap">
 		  		<nav className="slds-col slds-size--1-of-1 margin-on-top slds-col--padded">
                     <div className="slds-grid">
-                        <div className="slds-col slds-size--4-of-6">
+                        <div className="slds-col slds-size--4-of-6 search-input">
                             <div className="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
                                 <svg aria-hidden="true" className="slds-input__icon">
                                     <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
                                 </svg>
-                                <input placeholder="Search.." onChange={this.filterResults.bind(this)} className="slds-input search-input" type="text" />
+                                <input placeholder="Search.." onChange={this.filterResults.bind(this)} className="slds-input" type="text" />
                             </div>
                         </div>
                         <div className="slds-col slds-size--2-of-6 slds-col--padded">
@@ -42,8 +42,8 @@ class ListAccounts extends React.Component {
                                </button>
                            </Link>
                            <Link to="/save">
-                               <button className="slds-button slds-button--brand">
-                                    <svg aria-hidden="true" className="slds-button__icon--stateful slds-button__icon--left">
+                               <button className="slds-button slds-button--brand slight-margin-left background-success">
+                                    <svg aria-hidden="true" className="slds-button__icon--stateful slds-button__icon--left export-icon">
                                         <use xlinkHref="/assets/icons/action-sprite/svg/symbols.svg#share_file"></use>
                                     </svg>
                                </button>
