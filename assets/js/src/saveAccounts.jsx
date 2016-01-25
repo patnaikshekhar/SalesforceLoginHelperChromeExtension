@@ -85,6 +85,27 @@ export default class SaveAccounts extends React.Component {
         this.context.history.pushState('/');
     }
     
+    openFileDialog() {
+        this.refs.inputfile.click();
+    }
+    
+    importFile(e) {
+        var files = e.target.files;
+        
+        if (files.length > 0) {
+            let file = files[0];
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                var accounts = JSON.parse(reader.result);
+                console.log(accounts);
+            }
+            
+            reader.readAsText(file, 'utf-8');
+           
+        }
+    }
+    
     render() {
         const rows = this.state.accounts.map((acc) => {
             return (
@@ -139,7 +160,8 @@ export default class SaveAccounts extends React.Component {
                             </div>
                         </div>
                         <a href={this.state.exportURL} download="export.json"><button className="slds-button slds-button--brand" type="button" onClick={this.exportAccounts.bind(this)}>Export</button></a>
-                        <button className="slds-button slds-button--brand" type="button">Import</button>
+                        <input type="file" onChange={this.importFile.bind(this)} className="inputfile" ref="inputfile"/>
+                        <button className="slds-button slds-button--brand" type="button" onClick={this.openFileDialog.bind(this)}>Import</button>
                     </form>
                 </div>
             </div>    

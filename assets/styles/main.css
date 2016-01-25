@@ -29,3 +29,12 @@ body {
     background-color: rgb(4, 132, 75) !important;
     border-color:    rgb(4, 132, 75) !important;
 }
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}

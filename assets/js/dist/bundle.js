@@ -25283,6 +25283,28 @@
 	            this.context.history.pushState('/');
 	        }
 	    }, {
+	        key: 'openFileDialog',
+	        value: function openFileDialog() {
+	            this.refs.inputfile.click();
+	        }
+	    }, {
+	        key: 'importFile',
+	        value: function importFile(e) {
+	            var files = e.target.files;
+
+	            if (files.length > 0) {
+	                var file = files[0];
+	                var reader = new FileReader();
+
+	                reader.onload = function (e) {
+	                    var accounts = JSON.parse(reader.result);
+	                    console.log(accounts);
+	                };
+
+	                reader.readAsText(file, 'utf-8');
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
@@ -25405,9 +25427,10 @@
 	                                'Export'
 	                            )
 	                        ),
+	                        _react2.default.createElement('input', { type: 'file', onChange: this.importFile.bind(this), className: 'inputfile', ref: 'inputfile' }),
 	                        _react2.default.createElement(
 	                            'button',
-	                            { className: 'slds-button slds-button--brand', type: 'button' },
+	                            { className: 'slds-button slds-button--brand', type: 'button', onClick: this.openFileDialog.bind(this) },
 	                            'Import'
 	                        )
 	                    )
