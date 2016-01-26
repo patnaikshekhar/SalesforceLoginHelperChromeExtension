@@ -87,13 +87,41 @@ export default {
 		return true;
 	},
     
+    updateCompleteList(accountList) {
+        
+        // First Reset the indexes
+        
+        // Check if key is fine, else redo
+        let index = 0;
+        
+        accountList.forEach((acc) => {
+            
+            // Update the Last Accessed date if it is null
+            if (!acc.lastAccessed) {
+                acc.lastAccessed = Date.now();    
+            }
+            
+            acc.id = index;
+            index += 1;
+        });
+                
+                
+        this.accounts = accountList;
+        
+		this.dispatch(ACTION_CHANGED, this.accounts);
+        
+		return true;
+	},
+    
     deleteAccount(id) {
         this.accounts = this.accounts.filter(account => id != account.id);
         this.dispatch(ACTION_CHANGED, this.accounts);
     },
     
     unsubscribe(callback) {
+        console.log(callback);
         this.subscribers = this.subscribers.filter((c) => c != callback);
+        console.log('Post Unsubscribe', this.subscribers);
     },
     
 	subscribe(callback) {

@@ -10,6 +10,7 @@ class AccountList extends React.Component {
 	}
     
     refresh(action, accounts) {
+        console.log(Store.subscribers);
         if (this) {
           if (accounts.length > 0) {
             this.setState({
@@ -33,7 +34,7 @@ class AccountList extends React.Component {
 	}
     
     componentWillUnmount() {
-        Store.unsubscribe(this.refresh.bind(this));
+        Store.unsubscribe(this.refresh);
     }
     
     error(contents, e) {

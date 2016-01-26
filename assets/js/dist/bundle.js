@@ -24251,6 +24251,7 @@
 	  _createClass(AccountList, [{
 	    key: 'refresh',
 	    value: function refresh(action, accounts) {
+	      console.log(_store2.default.subscribers);
 	      if (this) {
 	        if (accounts.length > 0) {
 	          this.setState({
@@ -24276,7 +24277,7 @@
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
-	      _store2.default.unsubscribe(this.refresh.bind(this));
+	      _store2.default.unsubscribe(this.refresh);
 	    }
 	  }, {
 	    key: 'error',
@@ -24433,6 +24434,30 @@
 	        this.dispatch(ACTION_CHANGED, this.accounts);
 	        return true;
 	    },
+	    updateCompleteList: function updateCompleteList(accountList) {
+
+	        // First Reset the indexes
+
+	        // Check if key is fine, else redo
+	        var index = 0;
+
+	        accountList.forEach(function (acc) {
+
+	            // Update the Last Accessed date if it is null
+	            if (!acc.lastAccessed) {
+	                acc.lastAccessed = Date.now();
+	            }
+
+	            acc.id = index;
+	            index += 1;
+	        });
+
+	        this.accounts = accountList;
+
+	        this.dispatch(ACTION_CHANGED, this.accounts);
+
+	        return true;
+	    },
 	    deleteAccount: function deleteAccount(id) {
 	        this.accounts = this.accounts.filter(function (account) {
 	            return id != account.id;
@@ -24440,9 +24465,11 @@
 	        this.dispatch(ACTION_CHANGED, this.accounts);
 	    },
 	    unsubscribe: function unsubscribe(callback) {
+	        console.log(callback);
 	        this.subscribers = this.subscribers.filter(function (c) {
 	            return c != callback;
 	        });
+	        console.log('Post Unsubscribe', this.subscribers);
 	    },
 	    subscribe: function subscribe(callback) {
 	        this.subscribers.push(callback);
@@ -24981,7 +25008,7 @@
 	                        { className: 'slds-form-element' },
 	                        _react2.default.createElement(
 	                            'label',
-	                            { className: 'slds-form-element__label', 'for': 'orgType' },
+	                            { className: 'slds-form-element__label', htmlFor: 'orgType' },
 	                            'Environment'
 	                        ),
 	                        _react2.default.createElement(
@@ -25017,13 +25044,13 @@
 	                        { className: 'slds-form-element' },
 	                        _react2.default.createElement(
 	                            'label',
-	                            { className: 'slds-form-element__label', 'for': 'url' },
+	                            { className: 'slds-form-element__label', htmlFor: 'url' },
 	                            'URL'
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'URL', onChange: this.bindState.bind(this, 'url'), value: this.state.url, autocomplete: 'off' })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'URL', onChange: this.bindState.bind(this, 'url'), value: this.state.url, autoComplete: 'off' })
 	                        )
 	                    ) : null,
 	                    _react2.default.createElement(
@@ -25031,13 +25058,13 @@
 	                        { className: 'slds-form-element' },
 	                        _react2.default.createElement(
 	                            'label',
-	                            { className: 'slds-form-element__label', 'for': 'username' },
+	                            { className: 'slds-form-element__label', htmlFor: 'username' },
 	                            'Username'
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Username', onChange: this.bindState.bind(this, 'username'), value: this.state.username, autocomplete: 'off' })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Username', onChange: this.bindState.bind(this, 'username'), value: this.state.username, autoComplete: 'off' })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -25045,13 +25072,13 @@
 	                        { className: 'slds-form-element' },
 	                        _react2.default.createElement(
 	                            'label',
-	                            { className: 'slds-form-element__label', 'for': 'password' },
+	                            { className: 'slds-form-element__label', htmlFor: 'password' },
 	                            'Password'
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { className: 'slds-input', type: this.state.showPassword ? 'text' : 'password', placeholder: 'Password', onChange: this.bindState.bind(this, 'password'), value: this.state.password, autocomplete: 'off' })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: this.state.showPassword ? 'text' : 'password', placeholder: 'Password', onChange: this.bindState.bind(this, 'password'), value: this.state.password, autoComplete: 'off' })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -25059,13 +25086,13 @@
 	                        { className: 'slds-form-element' },
 	                        _react2.default.createElement(
 	                            'label',
-	                            { className: 'slds-form-element__label', 'for': 'name' },
+	                            { className: 'slds-form-element__label', htmlFor: 'name' },
 	                            'Name'
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'slds-form-element__control' },
-	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Name', onChange: this.bindState.bind(this, 'name'), value: this.state.name, autocomplete: 'off' })
+	                            _react2.default.createElement('input', { className: 'slds-input', type: 'text', placeholder: 'Name', onChange: this.bindState.bind(this, 'name'), value: this.state.name, autoComplete: 'off' })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -25183,6 +25210,10 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var IMPORT_STATE_IGNORE = 'Ignore';
+	var IMPORT_STATE_OVERWRITE = 'Overwrite';
+	var IMPORT_STATE_CREATE = 'Create';
+
 	var SaveAccounts = function (_React$Component) {
 	    _inherits(SaveAccounts, _React$Component);
 
@@ -25218,12 +25249,18 @@
 
 	            this.setState({
 	                accounts: [],
-	                secret: null
+	                secret: null,
+	                mode: 'Export'
 	            });
 
 	            _store2.default.subscribe(this.refresh.bind(this));
 
 	            _store2.default.initialize();
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            _store2.default.unsubscribe(this.refresh.bind(this));
 	        }
 
 	        // Sets the state when the checkbox is clicked
@@ -25290,24 +25327,132 @@
 	    }, {
 	        key: 'importFile',
 	        value: function importFile(e) {
+	            var _this2 = this;
+
 	            var files = e.target.files;
 
 	            if (files.length > 0) {
-	                var file = files[0];
-	                var reader = new FileReader();
+	                (function () {
+	                    var file = files[0];
 
-	                reader.onload = function (e) {
-	                    var accounts = JSON.parse(reader.result);
-	                    console.log(accounts);
-	                };
+	                    // Get a list of existing accounts to compare
+	                    var existingAccounts = _store2.default.accounts.map(function (acc) {
+	                        return acc.username + acc.url;
+	                    });
 
-	                reader.readAsText(file, 'utf-8');
+	                    var reader = new FileReader();
+
+	                    reader.onload = function (e) {
+	                        var jsonAccounts = JSON.parse(reader.result);
+
+	                        var accounts = jsonAccounts.map(function (a) {
+
+	                            // Decode Accounts
+	                            if (_this2.state.secret) {
+	                                a.username = CryptoJS.TripleDES.decrypt(a.username, _this2.state.secret).toString(CryptoJS.enc.Utf8);
+	                                a.password = CryptoJS.TripleDES.decrypt(a.password, _this2.state.secret).toString(CryptoJS.enc.Utf8);
+	                            }
+
+	                            var importState = null;
+	                            var importStates = [];
+	                            console.log(existingAccounts.includes(a.username + a.url), a.username, a.url, existingAccounts);
+	                            // Set Import State
+	                            if (existingAccounts.includes(a.username + a.url)) {
+	                                importStates = [IMPORT_STATE_IGNORE, IMPORT_STATE_OVERWRITE];
+	                                importState = IMPORT_STATE_IGNORE;
+	                            } else {
+	                                importStates = [IMPORT_STATE_CREATE, IMPORT_STATE_IGNORE];
+	                                importState = IMPORT_STATE_CREATE;
+	                            }
+
+	                            // Return the account wrapper
+	                            return {
+	                                id: a.id,
+	                                name: a.name,
+	                                selected: true,
+	                                account: a,
+	                                importState: null,
+	                                importStates: importStates.map(function (state) {
+	                                    return _react2.default.createElement(
+	                                        'option',
+	                                        null,
+	                                        state
+	                                    );
+	                                })
+	                            };
+	                        });
+
+	                        // Set State of Accounts
+	                        var state = Object.assign(_this2.state, {
+	                            accounts: accounts,
+	                            mode: 'Import'
+	                        });
+
+	                        _this2.setState(state);
+	                    };
+
+	                    reader.readAsText(file, 'utf-8');
+	                })();
 	            }
+	        }
+
+	        // Import the selected file
+
+	    }, {
+	        key: 'importSelected',
+	        value: function importSelected() {
+	            // Filter Ignored accounts from first List
+	            var accountsNotIgnored = this.state.accounts.filter(function (acc) {
+	                return acc.importState != IMPORT_STATE_IGNORE;
+	            }).map(function (acc) {
+	                return acc.account;
+	            });
+
+	            console.log('accountsNotIgnored', accountsNotIgnored);
+
+	            // Delete the ones that need to be overwritten from second List
+	            var listOfAccountsToBeOverwritten = this.state.accounts.filter(function (acc) {
+	                return acc.importState == IMPORT_STATE_OVERWRITE;
+	            }).map(function (acc) {
+	                return acc.account.username + acc.account.url;
+	            });
+
+	            console.log('listOfAccountsToBeOverwritten', listOfAccountsToBeOverwritten);
+
+	            var originalNonDeletedAccounts = _store2.default.accounts.filter(function (acc) {
+	                return !listOfAccountsToBeOverwritten.includes(acc.username + acc.url);
+	            });
+
+	            console.log('originalNonDeletedAccounts', originalNonDeletedAccounts);
+
+	            // Concat both lists
+	            var completeList = accountsNotIgnored.concat(originalNonDeletedAccounts);
+	            console.log('completeList', completeList);
+
+	            // Replace existing configuration
+	            _store2.default.updateCompleteList(completeList);
+
+	            // Go back to Home
+	            this.context.history.pushState('/');
+	        }
+	    }, {
+	        key: 'changeImportState',
+	        value: function changeImportState(accToChange, e) {
+	            var newImportState = e.target.value;
+	            accToChange.importState = newImportState;
+
+	            var newState = Object.assign(this.state, {
+	                accounts: this.state.accounts.map(function (acc) {
+	                    return acc.id == accToChange.id ? accToChange : acc;
+	                })
+	            });
+
+	            this.setState(newState);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this2 = this;
+	            var _this3 = this;
 
 	            var rows = this.state.accounts.map(function (acc) {
 	                return _react2.default.createElement(
@@ -25316,10 +25461,14 @@
 	                    _react2.default.createElement(
 	                        'td',
 	                        null,
-	                        _react2.default.createElement(
+	                        _this3.state.mode == 'Export' ? _react2.default.createElement(
 	                            'label',
-	                            { 'for': 'select-row1' },
-	                            _react2.default.createElement('input', { name: 'select-row1', type: 'checkbox', id: 'select-row1', checked: acc.selected, onChange: _this2.setSelected.bind(_this2, acc) })
+	                            { htmlFor: 'select-row1' },
+	                            _react2.default.createElement('input', { name: 'select-row1', type: 'checkbox', id: 'select-row1', checked: acc.selected, onChange: _this3.setSelected.bind(_this3, acc) })
+	                        ) : _react2.default.createElement(
+	                            'select',
+	                            { value: acc.importState, onChange: _this3.changeImportState.bind(_this3, acc) },
+	                            acc.importStates
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -25360,7 +25509,7 @@
 	                                    _react2.default.createElement(
 	                                        'h2',
 	                                        { className: 'slds-text-heading--small slds-truncate' },
-	                                        'Export'
+	                                        this.state.mode
 	                                    )
 	                                )
 	                            )
@@ -25377,10 +25526,14 @@
 	                                    _react2.default.createElement(
 	                                        'tr',
 	                                        null,
-	                                        _react2.default.createElement(
+	                                        this.state.mode == 'Export' ? _react2.default.createElement(
 	                                            'th',
 	                                            null,
 	                                            'Selected'
+	                                        ) : _react2.default.createElement(
+	                                            'th',
+	                                            null,
+	                                            'Action'
 	                                        ),
 	                                        _react2.default.createElement(
 	                                            'th',
@@ -25398,7 +25551,7 @@
 	                        )
 	                    )
 	                ),
-	                _react2.default.createElement(
+	                this.state.mode == 'Export' ? _react2.default.createElement(
 	                    'div',
 	                    { className: 'slds-col slds-size--1-of-1 margin-on-top slds-col--padded' },
 	                    _react2.default.createElement(
@@ -25430,9 +25583,17 @@
 	                        _react2.default.createElement('input', { type: 'file', onChange: this.importFile.bind(this), className: 'inputfile', ref: 'inputfile' }),
 	                        _react2.default.createElement(
 	                            'button',
-	                            { className: 'slds-button slds-button--brand', type: 'button', onClick: this.openFileDialog.bind(this) },
+	                            { className: 'slds-button slds-button--brand slight-margin-left', type: 'button', onClick: this.openFileDialog.bind(this) },
 	                            'Import'
 	                        )
+	                    )
+	                ) : _react2.default.createElement(
+	                    'div',
+	                    { className: 'slds-col slds-size--1-of-1 margin-on-top slds-col--padded' },
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'slds-button slds-button--brand', type: 'button', onClick: this.importSelected.bind(this) },
+	                        'Import Selected'
 	                    )
 	                )
 	            );

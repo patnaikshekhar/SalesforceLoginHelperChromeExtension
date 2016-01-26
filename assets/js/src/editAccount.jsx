@@ -140,7 +140,7 @@ class EditAccount extends React.Component {
                 </div>
 		  		<div className="slds-col slds-size--1-of-1 margin-on-top slds-col--padded slds-form--stacked">
                     <div className="slds-form-element">
-                        <label className="slds-form-element__label" for="orgType">Environment</label>
+                        <label className="slds-form-element__label" htmlFor="orgType">Environment</label>
                         <div className="slds-form-element__control">
                             <div className="slds-select_container">
                                 <select className="slds-select" onChange={this.bindState.bind(this, 'environment')} value={this.state.environment}>
@@ -153,28 +153,28 @@ class EditAccount extends React.Component {
                     </div>
                     { this.state.environment == 'Other' ?
                     <div className="slds-form-element">
-                        <label className="slds-form-element__label" for="url">URL</label>
+                        <label className="slds-form-element__label" htmlFor="url">URL</label>
                         <div className="slds-form-element__control">
-                            <input className="slds-input" type="text" placeholder="URL" onChange={this.bindState.bind(this, 'url')} value={this.state.url} autocomplete="off"/>
+                            <input className="slds-input" type="text" placeholder="URL" onChange={this.bindState.bind(this, 'url')} value={this.state.url} autoComplete="off"/>
                         </div>
                     </div> :
                     null }
                     <div className="slds-form-element">
-                        <label className="slds-form-element__label" for="username">Username</label>
+                        <label className="slds-form-element__label" htmlFor="username">Username</label>
                         <div className="slds-form-element__control">
-                            <input className="slds-input" type="text" placeholder="Username" onChange={this.bindState.bind(this, 'username')} value={this.state.username} autocomplete="off"/>
+                            <input className="slds-input" type="text" placeholder="Username" onChange={this.bindState.bind(this, 'username')} value={this.state.username} autoComplete="off"/>
                         </div>
                     </div>
                     <div className="slds-form-element">
-                        <label className="slds-form-element__label" for="password">Password</label>
+                        <label className="slds-form-element__label" htmlFor="password">Password</label>
                         <div className="slds-form-element__control">
-                            <input className="slds-input" type={ this.state.showPassword ? 'text' : 'password' } placeholder="Password" onChange={this.bindState.bind(this, 'password')} value={this.state.password} autocomplete="off"/>
+                            <input className="slds-input" type={ this.state.showPassword ? 'text' : 'password' } placeholder="Password" onChange={this.bindState.bind(this, 'password')} value={this.state.password} autoComplete="off"/>
                         </div>
                     </div>
                     <div className="slds-form-element">
-                        <label className="slds-form-element__label" for="name">Name</label>
+                        <label className="slds-form-element__label" htmlFor="name">Name</label>
                         <div className="slds-form-element__control">
-                            <input className="slds-input" type="text" placeholder="Name" onChange={this.bindState.bind(this, 'name')} value={this.state.name} autocomplete="off"/>
+                            <input className="slds-input" type="text" placeholder="Name" onChange={this.bindState.bind(this, 'name')} value={this.state.name} autoComplete="off"/>
                         </div>
                     </div>
                     <button className="slds-button slds-button--brand margin-on-top" onClick={this.saveChanges.bind(this)}>Save</button>
