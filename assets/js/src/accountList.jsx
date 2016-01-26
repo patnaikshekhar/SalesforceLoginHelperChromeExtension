@@ -10,7 +10,6 @@ class AccountList extends React.Component {
 	}
     
     refresh(action, accounts) {
-        console.log(Store.subscribers);
         if (this) {
           if (accounts.length > 0) {
             this.setState({
@@ -28,13 +27,14 @@ class AccountList extends React.Component {
             accounts: []
         });
         
-        Store.subscribe(this.refresh.bind(this));
-        
+        this.subscriptionNumber = Store.subscribe(this.refresh.bind(this));
         Store.initialize();
 	}
     
     componentWillUnmount() {
-        Store.unsubscribe(this.refresh);
+        if (this.subscriptionNumber != undefined) {
+            Store.unsubscribe(this.subscriptionNumber);    
+        }
     }
     
     error(contents, e) {

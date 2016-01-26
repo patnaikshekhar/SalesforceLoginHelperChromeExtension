@@ -26,7 +26,7 @@ export default {
                 
                 // Check if key is fine, else redo
                 let accounts = obj['accounts'];
-                let index = 0;
+                index = 0;
                 
                 accounts.forEach((acc) => {
                    
@@ -89,8 +89,6 @@ export default {
     
     updateCompleteList(accountList) {
         
-        // First Reset the indexes
-        
         // Check if key is fine, else redo
         let index = 0;
         
@@ -118,14 +116,13 @@ export default {
         this.dispatch(ACTION_CHANGED, this.accounts);
     },
     
-    unsubscribe(callback) {
-        console.log(callback);
-        this.subscribers = this.subscribers.filter((c) => c != callback);
-        console.log('Post Unsubscribe', this.subscribers);
+    unsubscribe(index) {
+        this.subscribers.splice(index, 1);
     },
     
 	subscribe(callback) {
 		this.subscribers.push(callback);
+        return this.subscribers.length - 1;
 	},
 
 	dispatch(action, obj) {

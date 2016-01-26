@@ -24212,7 +24212,7 @@
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _react = __webpack_require__(1);
@@ -24240,98 +24240,98 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var AccountList = function (_React$Component) {
-	  _inherits(AccountList, _React$Component);
+	    _inherits(AccountList, _React$Component);
 
-	  function AccountList() {
-	    _classCallCheck(this, AccountList);
+	    function AccountList() {
+	        _classCallCheck(this, AccountList);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AccountList).call(this));
-	  }
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(AccountList).call(this));
+	    }
 
-	  _createClass(AccountList, [{
-	    key: 'refresh',
-	    value: function refresh(action, accounts) {
-	      console.log(_store2.default.subscribers);
-	      if (this) {
-	        if (accounts.length > 0) {
-	          this.setState({
-	            accounts: accounts
-	          });
-	        } else {
-	          this.context.history.pushState(null, '/add/new');
+	    _createClass(AccountList, [{
+	        key: 'refresh',
+	        value: function refresh(action, accounts) {
+	            if (this) {
+	                if (accounts.length > 0) {
+	                    this.setState({
+	                        accounts: accounts
+	                    });
+	                } else {
+	                    this.context.history.pushState(null, '/add/new');
+	                }
+	            }
 	        }
-	      }
-	    }
-	  }, {
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
+	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
 
-	      this.setState({
-	        accounts: []
-	      });
+	            this.setState({
+	                accounts: []
+	            });
 
-	      _store2.default.subscribe(this.refresh.bind(this));
-
-	      _store2.default.initialize();
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      _store2.default.unsubscribe(this.refresh);
-	    }
-	  }, {
-	    key: 'error',
-	    value: function error(contents, e) {
-	      var state = this.state;
-	      state['error'] = contents;
-	      this.setState(state);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var items = this.state.accounts.filter(function (acc) {
-	        if (_this2.props.filter) {
-	          if (acc.name.toUpperCase().indexOf(_this2.props.filter.toUpperCase()) > -1) {
-	            return true;
-	          } else {
-	            return false;
-	          }
-	        } else {
-	          return true;
+	            this.subscriptionNumber = _store2.default.subscribe(this.refresh.bind(this));
+	            _store2.default.initialize();
 	        }
-	      }).map(function (acc) {
-	        return _react2.default.createElement(_accountListItem2.default, { name: acc.name, url: acc.url, environment: acc.environment, username: acc.username, password: acc.password, key: acc.id, id: acc.id, onError: _this2.error.bind(_this2) });
-	      });
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            if (this.subscriptionNumber != undefined) {
+	                _store2.default.unsubscribe(this.subscriptionNumber);
+	            }
+	        }
+	    }, {
+	        key: 'error',
+	        value: function error(contents, e) {
+	            var state = this.state;
+	            state['error'] = contents;
+	            this.setState(state);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
 
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          _errorDialog2.default,
-	          null,
-	          this.state.error
-	        ),
-	        _react2.default.createElement(
-	          'table',
-	          { className: 'slds-table slds-table--bordered' },
-	          _react2.default.createElement('thead', { className: 'slds-text-heading--label' }),
-	          _react2.default.createElement(
-	            'tbody',
-	            null,
-	            items
-	          )
-	        )
-	      );
-	    }
-	  }]);
+	            var items = this.state.accounts.filter(function (acc) {
+	                if (_this2.props.filter) {
+	                    if (acc.name.toUpperCase().indexOf(_this2.props.filter.toUpperCase()) > -1) {
+	                        return true;
+	                    } else {
+	                        return false;
+	                    }
+	                } else {
+	                    return true;
+	                }
+	            }).map(function (acc) {
+	                return _react2.default.createElement(_accountListItem2.default, { name: acc.name, url: acc.url, environment: acc.environment, username: acc.username, password: acc.password, key: acc.id, id: acc.id, onError: _this2.error.bind(_this2) });
+	            });
 
-	  return AccountList;
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    _errorDialog2.default,
+	                    null,
+	                    this.state.error
+	                ),
+	                _react2.default.createElement(
+	                    'table',
+	                    { className: 'slds-table slds-table--bordered' },
+	                    _react2.default.createElement('thead', { className: 'slds-text-heading--label' }),
+	                    _react2.default.createElement(
+	                        'tbody',
+	                        null,
+	                        items
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return AccountList;
 	}(_react2.default.Component);
 
 	AccountList.contextTypes = {
-	  history: _react2.default.PropTypes.object
+	    history: _react2.default.PropTypes.object
 	};
 
 	exports.default = AccountList;
@@ -24374,26 +24374,24 @@
 	        storage.get('accounts', function (obj) {
 
 	            if ('accounts' in obj) {
-	                (function () {
 
-	                    // Check if key is fine, else redo
-	                    var accounts = obj['accounts'];
-	                    var index = 0;
+	                // Check if key is fine, else redo
+	                var accounts = obj['accounts'];
+	                index = 0;
 
-	                    accounts.forEach(function (acc) {
+	                accounts.forEach(function (acc) {
 
-	                        // Update the Last Accessed date if it is null
-	                        if (!acc.lastAccessed) {
-	                            acc.lastAccessed = Date.now();
-	                        }
+	                    // Update the Last Accessed date if it is null
+	                    if (!acc.lastAccessed) {
+	                        acc.lastAccessed = Date.now();
+	                    }
 
-	                        acc.id = index;
-	                        index += 1;
-	                    });
+	                    acc.id = index;
+	                    index += 1;
+	                });
 
-	                    _this.accounts = accounts;
-	                    _this.dispatch(ACTION_CHANGED, _this.accounts);
-	                })();
+	                _this.accounts = accounts;
+	                _this.dispatch(ACTION_CHANGED, _this.accounts);
 	            } else {
 	                _this.accounts = [];
 	            }
@@ -24436,8 +24434,6 @@
 	    },
 	    updateCompleteList: function updateCompleteList(accountList) {
 
-	        // First Reset the indexes
-
 	        // Check if key is fine, else redo
 	        var index = 0;
 
@@ -24464,15 +24460,12 @@
 	        });
 	        this.dispatch(ACTION_CHANGED, this.accounts);
 	    },
-	    unsubscribe: function unsubscribe(callback) {
-	        console.log(callback);
-	        this.subscribers = this.subscribers.filter(function (c) {
-	            return c != callback;
-	        });
-	        console.log('Post Unsubscribe', this.subscribers);
+	    unsubscribe: function unsubscribe(index) {
+	        this.subscribers.splice(index, 1);
 	    },
 	    subscribe: function subscribe(callback) {
 	        this.subscribers.push(callback);
+	        return this.subscribers.length - 1;
 	    },
 	    dispatch: function dispatch(action, obj) {
 	        var _this2 = this;
