@@ -35,13 +35,15 @@ export default class SaveAccounts extends React.Component {
             mode: 'Export'
         });
         
-        Store.subscribe(this.refresh.bind(this));
+        this.subscriptionNumber = Store.subscribe(this.refresh.bind(this));
         
         Store.initialize();
 	}
     
     componentWillUnmount() {
-        Store.unsubscribe(this.refresh.bind(this));
+        if (this.subscriptionNumber != undefined) {
+            Store.unsubscribe(this.subscriptionNumber);    
+        }
     }
     
     // Sets the state when the checkbox is clicked
@@ -122,7 +124,7 @@ export default class SaveAccounts extends React.Component {
                     
                     var importState = null;
                     var importStates = [];
-                    console.log(existingAccounts.includes(a.username + a.url), a.username, a.url, existingAccounts);
+                    
                     // Set Import State
                     if (existingAccounts.includes(a.username + a.url)) {
                         importStates = [IMPORT_STATE_IGNORE, IMPORT_STATE_OVERWRITE];
@@ -138,9 +140,9 @@ export default class SaveAccounts extends React.Component {
                         name: a.name,
                         selected: true,
                         account: a,
-                        importState: null,
+                        importState: importState,
                         importStates: importStates.map(state =>
-                            <option>{ state }</option> 
+                            <option key={state}>{ state }</option> 
                         ) 
                     };    
                 });
@@ -166,22 +168,15 @@ export default class SaveAccounts extends React.Component {
             .filter((acc) => acc.importState != IMPORT_STATE_IGNORE)
             .map((acc) => acc.account);
         
-        console.log('accountsNotIgnored', accountsNotIgnored);
-        
         // Delete the ones that need to be overwritten from second List
         var listOfAccountsToBeOverwritten = this.state.accounts
             .filter((acc) => acc.importState == IMPORT_STATE_OVERWRITE)
             .map((acc) => acc.account.username + acc.account.url);
-        
-        console.log('listOfAccountsToBeOverwritten', listOfAccountsToBeOverwritten);
             
         var originalNonDeletedAccounts = Store.accounts.filter((acc) => !listOfAccountsToBeOverwritten.includes(acc.username + acc.url))
         
-        console.log('originalNonDeletedAccounts', originalNonDeletedAccounts);
-        
         // Concat both lists
         var completeList = accountsNotIgnored.concat(originalNonDeletedAccounts);
-        console.log('completeList', completeList);
         
         // Replace existing configuration
         Store.updateCompleteList(completeList);
@@ -260,7 +255,7 @@ export default class SaveAccounts extends React.Component {
                 <div className="slds-col slds-size--1-of-1 margin-on-top slds-col--padded">
                     <form className="slds-form--inline">
                         <div className="slds-form-element">
-                            <label className="slds-form-element__label" for="Encryption">Encryption Key</label>
+                            <label className="slds-form-element__label" htmlFor="Encryption">Encryption Key</label>
                             <div className="slds-form-element__control">
                                 <input className="slds-input" type="text" placeholder="Optional" value={this.state.secret} onChange={this.setSecret.bind(this)} />
                             </div>

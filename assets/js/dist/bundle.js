@@ -25246,14 +25246,16 @@
 	                mode: 'Export'
 	            });
 
-	            _store2.default.subscribe(this.refresh.bind(this));
+	            this.subscriptionNumber = _store2.default.subscribe(this.refresh.bind(this));
 
 	            _store2.default.initialize();
 	        }
 	    }, {
 	        key: 'componentWillUnmount',
 	        value: function componentWillUnmount() {
-	            _store2.default.unsubscribe(this.refresh.bind(this));
+	            if (this.subscriptionNumber != undefined) {
+	                _store2.default.unsubscribe(this.subscriptionNumber);
+	            }
 	        }
 
 	        // Sets the state when the checkbox is clicked
@@ -25348,7 +25350,7 @@
 
 	                            var importState = null;
 	                            var importStates = [];
-	                            console.log(existingAccounts.includes(a.username + a.url), a.username, a.url, existingAccounts);
+
 	                            // Set Import State
 	                            if (existingAccounts.includes(a.username + a.url)) {
 	                                importStates = [IMPORT_STATE_IGNORE, IMPORT_STATE_OVERWRITE];
@@ -25364,11 +25366,11 @@
 	                                name: a.name,
 	                                selected: true,
 	                                account: a,
-	                                importState: null,
+	                                importState: importState,
 	                                importStates: importStates.map(function (state) {
 	                                    return _react2.default.createElement(
 	                                        'option',
-	                                        null,
+	                                        { key: state },
 	                                        state
 	                                    );
 	                                })
@@ -25401,8 +25403,6 @@
 	                return acc.account;
 	            });
 
-	            console.log('accountsNotIgnored', accountsNotIgnored);
-
 	            // Delete the ones that need to be overwritten from second List
 	            var listOfAccountsToBeOverwritten = this.state.accounts.filter(function (acc) {
 	                return acc.importState == IMPORT_STATE_OVERWRITE;
@@ -25410,17 +25410,12 @@
 	                return acc.account.username + acc.account.url;
 	            });
 
-	            console.log('listOfAccountsToBeOverwritten', listOfAccountsToBeOverwritten);
-
 	            var originalNonDeletedAccounts = _store2.default.accounts.filter(function (acc) {
 	                return !listOfAccountsToBeOverwritten.includes(acc.username + acc.url);
 	            });
 
-	            console.log('originalNonDeletedAccounts', originalNonDeletedAccounts);
-
 	            // Concat both lists
 	            var completeList = accountsNotIgnored.concat(originalNonDeletedAccounts);
-	            console.log('completeList', completeList);
 
 	            // Replace existing configuration
 	            _store2.default.updateCompleteList(completeList);
@@ -25555,7 +25550,7 @@
 	                            { className: 'slds-form-element' },
 	                            _react2.default.createElement(
 	                                'label',
-	                                { className: 'slds-form-element__label', 'for': 'Encryption' },
+	                                { className: 'slds-form-element__label', htmlFor: 'Encryption' },
 	                                'Encryption Key'
 	                            ),
 	                            _react2.default.createElement(
