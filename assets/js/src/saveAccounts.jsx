@@ -1,6 +1,7 @@
 import React from 'react';
 import Store from './store';
 import Helper from './helper';
+import { Link } from 'react-router';
 
 let IMPORT_STATE_IGNORE = 'Ignore';
 let IMPORT_STATE_OVERWRITE = 'Overwrite';
@@ -230,9 +231,14 @@ export default class SaveAccounts extends React.Component {
                                 <div className="slds-media__body">
                                     <h2 className="slds-text-heading--small slds-truncate">{this.state.mode}</h2>
                                 </div>
+                                <div className="slds-no-flex">
+                                    <Link to="/">
+                                        <button className="slds-button slds-button--neutral slds-button--small">Back</button>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
-                        <div className="slds-card__body">
+                        <div className="slds-card__body import-export-table-height">
                             <table className="slds-table slds-table--bordered">
                                 <thead>
                                     <tr>

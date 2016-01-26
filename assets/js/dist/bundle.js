@@ -25195,6 +25195,8 @@
 
 	var _helper2 = _interopRequireDefault(_helper);
 
+	var _reactRouter = __webpack_require__(160);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25499,12 +25501,25 @@
 	                                        { className: 'slds-text-heading--small slds-truncate' },
 	                                        this.state.mode
 	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'slds-no-flex' },
+	                                    _react2.default.createElement(
+	                                        _reactRouter.Link,
+	                                        { to: '/' },
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { className: 'slds-button slds-button--neutral slds-button--small' },
+	                                            'Back'
+	                                        )
+	                                    )
 	                                )
 	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
-	                            { className: 'slds-card__body' },
+	                            { className: 'slds-card__body import-export-table-height' },
 	                            _react2.default.createElement(
 	                                'table',
 	                                { className: 'slds-table slds-table--bordered' },

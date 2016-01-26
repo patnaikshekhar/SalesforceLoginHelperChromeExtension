@@ -38,3 +38,8 @@ body {
 	position: absolute;
 	z-index: -1;
 }
+
+.import-export-table-height {
+    height: 410px;
+    overflow-y: scroll;
+}
