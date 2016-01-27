@@ -43,3 +43,8 @@ body {
     height: 410px;
     overflow-y: scroll;
 }
+
+.encryption-para {
+    margin-top: 8px;
+    font-size: 0.5em;
+}

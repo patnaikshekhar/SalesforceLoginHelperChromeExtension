@@ -269,6 +269,7 @@ export default class SaveAccounts extends React.Component {
                         <a href={this.state.exportURL} download="export.json"><button className="slds-button slds-button--brand" type="button" onClick={this.exportAccounts.bind(this)}>Export</button></a>
                         <input type="file" onChange={this.importFile.bind(this)} className="inputfile" ref="inputfile"/>
                         <button className="slds-button slds-button--brand slight-margin-left" type="button" onClick={this.openFileDialog.bind(this)}>Import</button>
+                        <p className="encryption-para">Enter the encryption key only if you want to encrypt the export or decrypt the import.</p>
                     </form>
                 </div>
                 :

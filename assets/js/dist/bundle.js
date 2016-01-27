@@ -25588,6 +25588,11 @@
 	                            'button',
 	                            { className: 'slds-button slds-button--brand slight-margin-left', type: 'button', onClick: this.openFileDialog.bind(this) },
 	                            'Import'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'encryption-para' },
+	                            'Enter the encryption key only if you want to encrypt the export or decrypt the import.'
 	                        )
 	                    )
 	                ) : _react2.default.createElement(
