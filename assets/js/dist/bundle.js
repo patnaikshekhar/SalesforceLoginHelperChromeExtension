@@ -24319,7 +24319,7 @@
 	                    _react2.default.createElement('thead', { className: 'slds-text-heading--label' }),
 	                    _react2.default.createElement(
 	                        'tbody',
-	                        null,
+	                        { className: 'account-list-table-body' },
 	                        items
 	                    )
 	                )

@@ -70,7 +70,7 @@ class AccountList extends React.Component {
                 <table className="slds-table slds-table--bordered">
                     <thead className="slds-text-heading--label">
                     </thead>
-                    <tbody>
+                    <tbody className="account-list-table-body">
                         { items }
                     </tbody>
                 </table>

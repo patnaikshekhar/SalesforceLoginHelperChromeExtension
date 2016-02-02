@@ -1,6 +1,7 @@
 body {
 	min-width: 600px;
 	min-height: 600px;
+    font-size: 0.65em;
 }
 
 .margin-on-top {
@@ -47,4 +48,8 @@ body {
 .encryption-para {
     margin-top: 8px;
     font-size: 0.5em;
+}
+
+.account-list-table-body td {
+    padding: 0.2em;    
 }
